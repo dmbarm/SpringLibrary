@@ -17,7 +17,6 @@ public class UnitOfWork {
 
     public UnitOfWork(BooksRepository booksRepository) {
         this.booksRepository = booksRepository;
-        booksCopy = new ArrayList<>(booksRepository.findAll());
     }
 
     public List<Book> getBooksList() {
@@ -63,6 +62,10 @@ public class UnitOfWork {
     }
 
     public void reload() {
-        this.booksCopy = new ArrayList<>(booksRepository.findAll());
+        try {
+            this.booksCopy = new ArrayList<>(booksRepository.findAll());
+        } catch (IOException e) {
+            throw new BookPersistenceException("Failed to reload books", e);
+        }
     }
 }

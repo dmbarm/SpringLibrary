@@ -17,6 +17,10 @@ public class LibraryService {
         this.uow = uow;
     }
 
+    public void startSession() {
+        uow.reload();
+    }
+
     public List<Book> getAllBooks() {
         return uow.getBooksList();
     }
@@ -25,6 +29,8 @@ public class LibraryService {
         if (book.getTitle() == null || book.getTitle().isBlank()) {
             throw new InvalidBookException("Title cannot be empty.");
         }
+
+        book.setId(generateNextId());
 
         if (uow.getBooksList().stream().anyMatch(b -> b.getId() == book.getId())) {
             throw new DuplicateBookException("A book with this ID already exists.");
@@ -73,5 +79,14 @@ public class LibraryService {
         }
 
         uow.commit();
+    }
+
+    // Helper
+
+    public long generateNextId() {
+        return getAllBooks().stream()
+                .mapToLong(Book::getId)
+                .max()
+                .orElse(0) + 1;
     }
 }

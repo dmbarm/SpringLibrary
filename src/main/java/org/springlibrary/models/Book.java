@@ -17,12 +17,14 @@ public class Book {
 
     @Override
     public String toString() {
-        return "";
-        //todo make toString method
+        return id + ". '" + title + "' by " + author + ". " + description + ".";
     }
 
     public long getId() {
         return id;
+    }
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {

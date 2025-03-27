@@ -13,7 +13,6 @@ import java.util.Scanner;
 
 @Controller
 public class LibraryController {
-    //todo add some field
     private final Scanner scanner = new Scanner(System.in);
     private final LibraryService libraryService;
 
@@ -22,18 +21,21 @@ public class LibraryController {
     }
 
     public void startUserInput() {
+        libraryService.startSession();
         boolean exit = false;
 
+        System.out.println("Welcome to the library!");
         while (!exit) {
-            System.out.println("Welcome to the library!");
             System.out.println("Choose an option:");
             System.out.println("1) Display book list");
             System.out.println("2) Create new book");
             System.out.println("3) Edit book");
             System.out.println("4) Delete book");
+            System.out.println("e) Exit");
             System.out.print("\nChoose an option: ");
 
             String input = scanner.nextLine();
+            System.out.println();
             switch (input) {
                 case "1" -> displayBookList();
                 case "2" -> createNewBook();
@@ -43,8 +45,6 @@ public class LibraryController {
                 default -> System.out.println("Invalid option, please try again.");
             }
         }
-
-        //todo make closing of everything(if needed)
     }
 
     private void displayBookList() {
@@ -66,9 +66,9 @@ public class LibraryController {
             libraryService.addBook(new Book(title, author, description));
             System.out.println("Book added successfully.");
         } catch (InvalidBookException | DuplicateBookException e) {
-            System.out.println("Could not add book: " + e.getMessage());
+            System.err.println("Could not add book: " + e.getMessage());
         } catch (BookPersistenceException e) {
-            System.out.println("System error: failed to save the book.");
+            System.err.println("System error: failed to save the book.");
         }
     }
 
@@ -80,7 +80,7 @@ public class LibraryController {
         try {
             book = libraryService.findByIdOrTitle(input);
         } catch (BookNotFoundException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return;
         }
 
@@ -100,9 +100,9 @@ public class LibraryController {
             libraryService.updateBook(book);
             System.out.println("Book updated successfully.");
         } catch (BookNotFoundException | InvalidBookException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         } catch (BookPersistenceException e) {
-            System.out.println("System error: could not save the book.");
+            System.err.println("System error: could not save the book.");
         }
     }
 
@@ -114,7 +114,7 @@ public class LibraryController {
             libraryService.deleteByIdOrTitle(input);
             System.out.println("Book deleted successfully.");
         } catch (BookNotFoundException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 }
