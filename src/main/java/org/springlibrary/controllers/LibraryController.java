@@ -6,43 +6,46 @@ import org.springlibrary.exceptions.BookPersistenceException;
 import org.springlibrary.exceptions.DuplicateBookException;
 import org.springlibrary.exceptions.InvalidBookException;
 import org.springlibrary.models.Book;
+import org.springlibrary.services.InputService;
 import org.springlibrary.services.LibraryService;
+import org.springlibrary.services.MessagesService;
 
 import java.util.List;
-import java.util.Scanner;
 
 @Controller
 public class LibraryController {
-    private final Scanner scanner = new Scanner(System.in);
+    private final InputService input;
+    private final MessagesService message;
     private final LibraryService libraryService;
 
-    public LibraryController(LibraryService libraryService) {
+    public LibraryController(InputService inputService, MessagesService messagesService, LibraryService libraryService) {
+        this.input = inputService;
+        this.message = messagesService;
         this.libraryService = libraryService;
     }
 
-    public void startUserInput() {
+    public void startBookManagement() {
         libraryService.startSession();
         boolean exit = false;
 
-        System.out.println("Welcome to the library!");
+        System.out.println(message.getString("welcome"));
         while (!exit) {
-            System.out.println("Choose an option:");
-            System.out.println("1) Display book list");
-            System.out.println("2) Create new book");
-            System.out.println("3) Edit book");
-            System.out.println("4) Delete book");
-            System.out.println("e) Exit");
-            System.out.print("\nChoose an option: ");
+            System.out.println(message.getString("choose.option"));
+            System.out.println("1) " + message.getString("option.1"));
+            System.out.println("2) " + message.getString("option.2"));
+            System.out.println("3) " + message.getString("option.3"));
+            System.out.println("4) " + message.getString("option.4"));
+            System.out.println("e) " + message.getString("option.e"));
 
-            String input = scanner.nextLine();
-            System.out.println();
+            String input = this.input.prompt("\n" + message.getString("prompt.choose"));
+
             switch (input) {
                 case "1" -> displayBookList();
                 case "2" -> createNewBook();
                 case "3" -> editBook();
                 case "4" -> deleteBook();
                 case "e" -> exit = true;
-                default -> System.out.println("Invalid option, please try again.");
+                default -> System.out.println(message.getString("invalid.option"));
             }
         }
     }
@@ -55,12 +58,9 @@ public class LibraryController {
     }
 
     private void createNewBook() {
-        System.out.println("Enter title of the book:");
-        String title = scanner.nextLine();
-        System.out.println("Enter author of the book:");
-        String author = scanner.nextLine();
-        System.out.println("Enter short description for the book:");
-        String description = scanner.nextLine();
+        String title = input.prompt("Enter title of the book:");
+        String author = input.prompt("Enter author of the book:");
+        String description = input.prompt("Enter short description for the book:");;
 
         try {
             libraryService.addBook(new Book(title, author, description));
@@ -73,8 +73,7 @@ public class LibraryController {
     }
 
     private void editBook() {
-        System.out.println("Enter id or title of the book:");
-        String input = scanner.nextLine();
+        String input = this.input.prompt("Enter id or title of the book:");
 
         Book book;
         try {
@@ -84,16 +83,13 @@ public class LibraryController {
             return;
         }
 
-        System.out.println("Enter new title (leave blank to keep current):");
-        String title = scanner.nextLine();
+        String title = this.input.prompt("Enter new title (leave blank to keep current): ");
         if (!title.isBlank()) book.setTitle(title);
 
-        System.out.println("Enter new author (leave blank to keep current):");
-        String author = scanner.nextLine();
+        String author = this.input.prompt("Enter new author (leave blank to keep current):");
         if (!author.isBlank()) book.setAuthor(author);
 
-        System.out.println("Enter new description (leave blank to keep current):");
-        String description = scanner.nextLine();
+        String description = this.input.prompt("Enter new description (leave blank to keep current):");
         if (!description.isBlank()) book.setDescription(description);
 
         try {
@@ -107,8 +103,7 @@ public class LibraryController {
     }
 
     private void deleteBook() {
-        System.out.println("Enter id or title of the book to delete:");
-        String input = scanner.nextLine();
+        String input = this.input.prompt("Enter id or title of the book to delete:");
 
         try {
             libraryService.deleteByIdOrTitle(input);

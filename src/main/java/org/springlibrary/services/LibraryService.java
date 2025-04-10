@@ -82,7 +82,6 @@ public class LibraryService {
     }
 
     // Helper
-
     public long generateNextId() {
         return getAllBooks().stream()
                 .mapToLong(Book::getId)
