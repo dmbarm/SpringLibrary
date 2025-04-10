@@ -27,13 +27,13 @@ public class LibraryService {
 
     public void addBook(Book book) {
         if (book.getTitle() == null || book.getTitle().isBlank()) {
-            throw new InvalidBookException("Title cannot be empty.");
+            throw new InvalidBookException("error.book.title.empty");
         }
 
         book.setId(generateNextId());
 
         if (uow.getBooksList().stream().anyMatch(b -> b.getId() == book.getId())) {
-            throw new DuplicateBookException("A book with this ID already exists.");
+            throw new DuplicateBookException("error.book.duplicate");
         }
 
         uow.add(book);
@@ -51,14 +51,14 @@ public class LibraryService {
             result = uow.findByTitle(input);
         }
 
-        return result.orElseThrow(() -> new BookNotFoundException("Book not found for input: " + input));
+        return result.orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
     }
 
     public void updateBook(Book book) {
         boolean updated = uow.update(book);
 
         if (!updated) {
-            throw new BookNotFoundException("Book with ID " + book.getId() + " not found.");
+            throw new BookNotFoundException("error.book.notfound");
         }
 
         uow.commit();
@@ -75,7 +75,7 @@ public class LibraryService {
         }
 
         if (!deleted) {
-            throw new BookNotFoundException("No book found to delete with input: " + input);
+            throw new BookNotFoundException("error.book.notfound");
         }
 
         uow.commit();

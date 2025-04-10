@@ -67,7 +67,7 @@ public class LibraryController {
             libraryService.addBook(new Book(title, author, description));
             System.out.println(message.getString("book.add.success"));
         } catch (InvalidBookException | DuplicateBookException e) {
-            System.err.println(message.getString("book.add.failed.user") + ": " + e.getMessage());
+            System.err.println(message.getString("book.add.failed.user") + ": " + message.getString(e.getMessage()));
         } catch (BookPersistenceException e) {
             System.err.println(message.getString("book.add.failed.system"));
         }
@@ -80,7 +80,7 @@ public class LibraryController {
         try {
             book = libraryService.findByIdOrTitle(userInput);
         } catch (BookNotFoundException e) {
-            System.err.println(e.getMessage());
+            System.err.println(message.getString("error.book.notfound"));
             return;
         }
 
@@ -97,7 +97,7 @@ public class LibraryController {
             libraryService.updateBook(book);
             System.out.println(message.getString("book.update.success"));
         } catch (BookNotFoundException | InvalidBookException e) {
-            System.err.println(message.getString("book.update.failed.user") + ": " + e.getMessage());
+            System.err.println(message.getString("book.update.failed.user") + ": " + message.getString(e.getMessage()));
         } catch (BookPersistenceException e) {
             System.err.println(message.getString("book.update.failed.system"));
         }
@@ -110,7 +110,7 @@ public class LibraryController {
             libraryService.deleteByIdOrTitle(userInput);
             System.out.println(message.getString("book.delete.success"));
         } catch (BookNotFoundException e) {
-            System.err.println(message.getString("book.delete.failed.user") + ": " + e.getMessage());
+            System.err.println(message.getString("book.delete.failed.user") + ": " + message.getString(e.getMessage()));
         }
     }
 }
