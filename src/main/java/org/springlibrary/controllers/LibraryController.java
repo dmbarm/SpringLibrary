@@ -47,6 +47,7 @@ public class LibraryController {
                 case "e" -> exit = true;
                 default -> System.out.println(message.getString("invalid.option"));
             }
+            System.out.println();
         }
     }
 
@@ -58,58 +59,58 @@ public class LibraryController {
     }
 
     private void createNewBook() {
-        String title = input.prompt("Enter title of the book:");
-        String author = input.prompt("Enter author of the book:");
-        String description = input.prompt("Enter short description for the book:");;
+        String title = input.prompt(message.getString("prompt.title"));
+        String author = input.prompt(message.getString("prompt.author"));
+        String description = input.prompt(message.getString("prompt.description"));
 
         try {
             libraryService.addBook(new Book(title, author, description));
-            System.out.println("Book added successfully.");
+            System.out.println(message.getString("book.add.success"));
         } catch (InvalidBookException | DuplicateBookException e) {
-            System.err.println("Could not add book: " + e.getMessage());
+            System.err.println(message.getString("book.add.failed.user") + ": " + e.getMessage());
         } catch (BookPersistenceException e) {
-            System.err.println("System error: failed to save the book.");
+            System.err.println(message.getString("book.add.failed.system"));
         }
     }
 
     private void editBook() {
-        String input = this.input.prompt("Enter id or title of the book:");
+        String userInput = input.prompt(message.getString("prompt.find.idOrTitle"));
 
         Book book;
         try {
-            book = libraryService.findByIdOrTitle(input);
+            book = libraryService.findByIdOrTitle(userInput);
         } catch (BookNotFoundException e) {
             System.err.println(e.getMessage());
             return;
         }
 
-        String title = this.input.prompt("Enter new title (leave blank to keep current): ");
+        String title = input.prompt(message.getString("prompt.new.title"));
         if (!title.isBlank()) book.setTitle(title);
 
-        String author = this.input.prompt("Enter new author (leave blank to keep current):");
+        String author = input.prompt(message.getString("prompt.new.author"));
         if (!author.isBlank()) book.setAuthor(author);
 
-        String description = this.input.prompt("Enter new description (leave blank to keep current):");
+        String description = input.prompt(message.getString("prompt.new.description"));
         if (!description.isBlank()) book.setDescription(description);
 
         try {
             libraryService.updateBook(book);
-            System.out.println("Book updated successfully.");
+            System.out.println(message.getString("book.update.success"));
         } catch (BookNotFoundException | InvalidBookException e) {
-            System.err.println(e.getMessage());
+            System.err.println(message.getString("book.update.failed.user") + ": " + e.getMessage());
         } catch (BookPersistenceException e) {
-            System.err.println("System error: could not save the book.");
+            System.err.println(message.getString("book.update.failed.system"));
         }
     }
 
     private void deleteBook() {
-        String input = this.input.prompt("Enter id or title of the book to delete:");
+        String userInput = input.prompt(message.getString("prompt.find.idOrTitle"));
 
         try {
-            libraryService.deleteByIdOrTitle(input);
-            System.out.println("Book deleted successfully.");
+            libraryService.deleteByIdOrTitle(userInput);
+            System.out.println(message.getString("book.delete.success"));
         } catch (BookNotFoundException e) {
-            System.err.println(e.getMessage());
+            System.err.println(message.getString("book.delete.failed.user") + ": " + e.getMessage());
         }
     }
 }

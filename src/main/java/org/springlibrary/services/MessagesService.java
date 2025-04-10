@@ -16,9 +16,10 @@ public class MessagesService {
     }
 
     public void selectLanguage() {
-        String language = inputService.prompt("Select language(en/pl)");
+        String language = inputService.prompt("Select language(en/pl/ru)");
         Locale locale = switch (language) {
             case "pl" -> Locale.of("pl");
+            case "ru" -> Locale.of("ru");
             case "en" -> Locale.of("en");
             default -> {
                 System.out.println("Invalid language choice: " + language + ". Choosing default: en");
