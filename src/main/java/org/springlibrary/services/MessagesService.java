@@ -1,36 +1,36 @@
 package org.springlibrary.services;
 
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 @Service
 public class MessagesService {
+    private final MessageSource messageSource;
     private final InputService inputService;
 
-    private ResourceBundle resourceBundle;
+    private Locale locale;
 
-    public MessagesService(InputService inputService) {
+    public MessagesService(MessageSource messageSource, InputService inputService) {
+        this.messageSource = messageSource;
         this.inputService = inputService;
     }
 
     public void selectLanguage() {
-        String language = inputService.prompt("Select language(en/pl/ru)");
-        Locale locale = switch (language) {
+        String language = inputService.prompt("Select language (en/pl/ru):");
+        this.locale = switch (language) {
             case "pl" -> Locale.of("pl");
             case "ru" -> Locale.of("ru");
             case "en" -> Locale.of("en");
             default -> {
-                System.out.println("Invalid language choice: " + language + ". Choosing default: en");
-                yield Locale.of("en");
+                System.out.println("Invalid language. Defaulting to English.");
+                yield Locale.ENGLISH;
             }
         };
-
-        resourceBundle = ResourceBundle.getBundle("messages", locale);
     }
 
-    public String getString(String key) {
-        return resourceBundle.getString(key);
+    public String getMessage(String key) {
+        return messageSource.getMessage(key, null, locale);
     }
 }

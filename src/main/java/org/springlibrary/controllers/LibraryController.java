@@ -28,16 +28,16 @@ public class LibraryController {
         libraryService.startSession();
         boolean exit = false;
 
-        System.out.println(message.getString("welcome"));
+        System.out.println(message.getMessage("welcome"));
         while (!exit) {
-            System.out.println(message.getString("choose.option"));
-            System.out.println("1) " + message.getString("option.1"));
-            System.out.println("2) " + message.getString("option.2"));
-            System.out.println("3) " + message.getString("option.3"));
-            System.out.println("4) " + message.getString("option.4"));
-            System.out.println("e) " + message.getString("option.e"));
+            System.out.println(message.getMessage("choose.option"));
+            System.out.println("1) " + message.getMessage("option.1"));
+            System.out.println("2) " + message.getMessage("option.2"));
+            System.out.println("3) " + message.getMessage("option.3"));
+            System.out.println("4) " + message.getMessage("option.4"));
+            System.out.println("e) " + message.getMessage("option.e"));
 
-            String input = this.input.prompt("\n" + message.getString("prompt.choose"));
+            String input = this.input.prompt("\n" + message.getMessage("prompt.choose"));
 
             switch (input) {
                 case "1" -> displayBookList();
@@ -45,7 +45,7 @@ public class LibraryController {
                 case "3" -> editBook();
                 case "4" -> deleteBook();
                 case "e" -> exit = true;
-                default -> System.out.println(message.getString("invalid.option"));
+                default -> System.out.println(message.getMessage("invalid.option"));
             }
             System.out.println();
         }
@@ -59,58 +59,58 @@ public class LibraryController {
     }
 
     private void createNewBook() {
-        String title = input.prompt(message.getString("prompt.title"));
-        String author = input.prompt(message.getString("prompt.author"));
-        String description = input.prompt(message.getString("prompt.description"));
+        String title = input.prompt(message.getMessage("prompt.title"));
+        String author = input.prompt(message.getMessage("prompt.author"));
+        String description = input.prompt(message.getMessage("prompt.description"));
 
         try {
             libraryService.addBook(new Book(title, author, description));
-            System.out.println(message.getString("book.add.success"));
+            System.out.println(message.getMessage("book.add.success"));
         } catch (InvalidBookException | DuplicateBookException e) {
-            System.err.println(message.getString("book.add.failed.user") + ": " + message.getString(e.getMessage()));
+            System.err.println(message.getMessage("book.add.failed.user") + ": " + message.getMessage(e.getMessage()));
         } catch (BookPersistenceException e) {
-            System.err.println(message.getString("book.add.failed.system"));
+            System.err.println(message.getMessage("book.add.failed.system"));
         }
     }
 
     private void editBook() {
-        String userInput = input.prompt(message.getString("prompt.find.idOrTitle"));
+        String userInput = input.prompt(message.getMessage("prompt.find.idOrTitle"));
 
         Book book;
         try {
             book = libraryService.findByIdOrTitle(userInput);
         } catch (BookNotFoundException e) {
-            System.err.println(message.getString("error.book.notfound"));
+            System.err.println(message.getMessage("error.book.notfound"));
             return;
         }
 
-        String title = input.prompt(message.getString("prompt.new.title"));
+        String title = input.prompt(message.getMessage("prompt.new.title"));
         if (!title.isBlank()) book.setTitle(title);
 
-        String author = input.prompt(message.getString("prompt.new.author"));
+        String author = input.prompt(message.getMessage("prompt.new.author"));
         if (!author.isBlank()) book.setAuthor(author);
 
-        String description = input.prompt(message.getString("prompt.new.description"));
+        String description = input.prompt(message.getMessage("prompt.new.description"));
         if (!description.isBlank()) book.setDescription(description);
 
         try {
             libraryService.updateBook(book);
-            System.out.println(message.getString("book.update.success"));
+            System.out.println(message.getMessage("book.update.success"));
         } catch (BookNotFoundException | InvalidBookException e) {
-            System.err.println(message.getString("book.update.failed.user") + ": " + message.getString(e.getMessage()));
+            System.err.println(message.getMessage("book.update.failed.user") + ": " + message.getMessage(e.getMessage()));
         } catch (BookPersistenceException e) {
-            System.err.println(message.getString("book.update.failed.system"));
+            System.err.println(message.getMessage("book.update.failed.system"));
         }
     }
 
     private void deleteBook() {
-        String userInput = input.prompt(message.getString("prompt.find.idOrTitle"));
+        String userInput = input.prompt(message.getMessage("prompt.find.idOrTitle"));
 
         try {
             libraryService.deleteByIdOrTitle(userInput);
-            System.out.println(message.getString("book.delete.success"));
+            System.out.println(message.getMessage("book.delete.success"));
         } catch (BookNotFoundException e) {
-            System.err.println(message.getString("book.delete.failed.user") + ": " + message.getString(e.getMessage()));
+            System.err.println(message.getMessage("book.delete.failed.user") + ": " + message.getMessage(e.getMessage()));
         }
     }
 }
