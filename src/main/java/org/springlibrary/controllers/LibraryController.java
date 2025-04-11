@@ -10,6 +10,7 @@ import org.springlibrary.services.InputService;
 import org.springlibrary.services.LibraryService;
 import org.springlibrary.services.MessagesService;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 @Controller
@@ -54,7 +55,7 @@ public class LibraryController {
     private void displayBookList() {
         List<Book> booksList = libraryService.getAllBooks();
         for (Book book : booksList) {
-            System.out.println(book);
+            System.out.println(getFormattedBookView(book));
         }
     }
 
@@ -112,5 +113,14 @@ public class LibraryController {
         } catch (BookNotFoundException e) {
             System.err.println(message.getMessage("book.delete.failed.user") + ": " + message.getMessage(e.getMessage()));
         }
+    }
+
+    // Helper
+    private String getFormattedBookView(Book book) {
+        return MessageFormat.format(message.getMessage("book.view.format"),
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getDescription());
     }
 }
