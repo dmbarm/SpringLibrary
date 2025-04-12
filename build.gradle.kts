@@ -13,6 +13,12 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework/spring-context
     implementation("org.springframework:spring-context:6.2.5")
 
+    // https://mvnrepository.com/artifact/org.springframework/spring-aop
+    implementation("org.springframework:spring-aop:6.2.5")
+
+    // https://mvnrepository.com/artifact/org.aspectj/aspectjweaver
+    implementation("org.aspectj:aspectjweaver:1.9.23")
+
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-csv
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.18.3")
 }

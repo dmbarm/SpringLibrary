@@ -9,5 +9,6 @@ public class SpringLibraryApp {
         AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext(AppConfig.class);
         LibraryController libraryController = appContext.getBean(LibraryController.class);
         libraryController.startUserInput();
+
     }
 }
