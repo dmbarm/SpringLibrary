@@ -3,30 +3,29 @@ package org.springlibrary.aspects;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 @Aspect
 @Component
 public class LoggingAspect {
+    private static final Logger log = LoggerFactory.getLogger(LoggingAspect.class);
 
     @Around("execution(* org.springlibrary.services..*(..))")
     public Object logMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         String methodName = joinPoint.getSignature().toShortString();
         Object[] args = joinPoint.getArgs();
 
-        String currentTime = "[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")) + "] ";
-        System.out.println(currentTime + "Calling method: " + methodName + " with args: " + Arrays.toString(args));
-
+        log.debug("Calling method: {} with args: {}", methodName, Arrays.toString(args));
         Object result;
         try {
             result = joinPoint.proceed();
-            System.out.println(currentTime + "Method succeeded with result: " + result);
+            log.debug("Method succeeded with result: {}",result);
         } catch (Throwable e) {
-            System.out.println(currentTime + "Method failed with exception: " + e.getMessage());
+            log.error("Method failed with exception: {}", e.getMessage());
             throw e;
         }
 
