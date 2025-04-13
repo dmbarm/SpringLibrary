@@ -22,7 +22,6 @@ dependencies {
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-csv
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.18.3")
 
-
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     implementation("org.slf4j:slf4j-api:2.0.17")
 
