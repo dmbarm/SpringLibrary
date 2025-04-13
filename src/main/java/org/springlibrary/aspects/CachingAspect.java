@@ -4,31 +4,36 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
-import org.springlibrary.models.Book;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 @Aspect
 @Component
 public class CachingAspect {
-    private static final Map<String, Book> booksCache = new HashMap<>();
+    private static final Map<String, Object> booksCache = new HashMap<>();
 
-    @Around("execution(org.springlibrary.models.Book org.springlibrary.services.LibraryService.findByIdOrTitle(String))")
+    @Around("execution(* org.springlibrary..*(..))")
     public Object checkBooksCache(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object[] args = joinPoint.getArgs();
-        String input = (String) args[0];
-        Book book;
-        if (booksCache.containsKey(input)) {
-            book = booksCache.get(input);
+        if (joinPoint.getArgs().length == 0) return joinPoint.proceed();
+
+        String key = joinPoint.getSignature().toString() + ":" + Arrays.toString(joinPoint.getArgs());
+        Object result;
+
+        if (booksCache.containsKey(key)) {
+            result = booksCache.get(key);
+            System.out.println("Retrieved from cache: key=" + key + ", result=" + result);
         }
         else {
-            Object result = joinPoint.proceed();
-            book = (Book) result;
-            booksCache.put(input, (Book) result);
+            result = joinPoint.proceed();
+            if (result != null) {
+                booksCache.put(key, result);
+                System.out.println("Put to cache: key=" + key + ", result=" + result);
+            }
         }
 
-        return book;
+        return result;
     }
 
 }
