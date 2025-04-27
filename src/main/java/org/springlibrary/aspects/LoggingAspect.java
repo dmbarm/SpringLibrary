@@ -12,23 +12,26 @@ import java.util.Arrays;
 @Aspect
 @Component
 public class LoggingAspect {
-    private static final Logger log = LoggerFactory.getLogger(LoggingAspect.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
     @Around("execution(* org.springlibrary.services..*(..))")
     public Object logMethod(ProceedingJoinPoint joinPoint) throws Throwable {
         String methodName = joinPoint.getSignature().toShortString();
         Object[] args = joinPoint.getArgs();
 
-        log.debug("Calling method: {} with args: {}", methodName, Arrays.toString(args));
-        Object result;
-        try {
-            result = joinPoint.proceed();
-            log.debug("Method succeeded with result: {}",result);
-        } catch (Throwable e) {
-            log.error("Method failed with exception: {}", e.getMessage());
-            throw e;
+        if (logger.isDebugEnabled()) {
+            logger.debug("Calling method: {} with args: {}", methodName, Arrays.toString(args));
         }
 
-        return result;
+        try {
+            Object result = joinPoint.proceed();
+            if (logger.isDebugEnabled()) {
+                logger.debug("Method {} succeeded with result: {}", methodName, result);
+            }
+            return result;
+        } catch (Throwable e) {
+            logger.error("Method {} failed with exception", methodName, e);
+            throw e;
+        }
     }
 }
