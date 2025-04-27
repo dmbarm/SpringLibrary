@@ -12,3 +12,7 @@ aspectjweaver = { module = "org.aspectj:aspectjweaver", version.ref = "aspectj" 
 jackson-csv = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-csv", version.ref = "jackson" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+[bundles]
+spring = ["spring-context", "spring-aop"]
+logging = ["slf4j-api", "logback-classic"]

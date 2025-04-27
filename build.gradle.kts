@@ -10,17 +10,10 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.spring.context)
-
-    implementation(libs.spring.aop)
-
+    implementation(libs.bundles.spring)
     implementation(libs.aspectjweaver)
-
     implementation(libs.jackson.csv)
-
-    implementation(libs.slf4j.api)
-
-    runtimeOnly(libs.logback.classic)
+    implementation(libs.bundles.logging)
 }
 
 tasks.test {
