@@ -1,0 +1,16 @@
+[versions]
+spring = "6.2.6"
+jackson = "2.19.0"
+postgres = "42.7.5"
+hikaricp = "6.3.0"
+
+[libraries]
+spring-context = { module = "org.springframework:spring-context", version.ref = "spring" }
+spring-jdbc = { module = "org.springframework:spring-jdbc", version.ref = "spring" }
+jackson-csv = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-csv", version.ref = "jackson" }
+postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
+hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
+
+[bundles]
+spring = ["spring-context", "spring-jdbc"]
+database = ["postgres", "hikaricp"]
