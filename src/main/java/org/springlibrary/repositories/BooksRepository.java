@@ -24,9 +24,6 @@ public class BooksRepository {
             .setColumnSeparator(',')
             .build();
 
-    public BooksRepository() {
-    }
-
     public List<Book> findAll() throws IOException {
         MappingIterator<Book> it = mapper.readerFor(Book.class)
                 .with(schema)
