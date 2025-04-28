@@ -1,5 +1,7 @@
 package org.springlibrary.controllers;
 
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 import org.springlibrary.services.MessagesService;
 
@@ -14,6 +16,7 @@ public class MainController {
         this.libraryController = libraryController;
     }
 
+    @EventListener(ContextRefreshedEvent.class)
     public void startUserInput() {
         messagesService.selectLanguage();
         libraryController.startBookManagement();

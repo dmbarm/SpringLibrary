@@ -15,6 +15,13 @@ public class Book {
         this.description = description;
     }
 
+    public Book(long id, String title, String author, String description) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return id + ". '" + title + "' by " + author + ". " + description + ".";

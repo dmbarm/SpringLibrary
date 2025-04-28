@@ -1,40 +1,88 @@
 package org.springlibrary.repositories;
 
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springlibrary.models.Book;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class BooksRepository {
+    private static final String COLUMN_ID = "Book_ID";
+    private static final String COLUMN_TITLE = "Title";
+    private static final String COLUMN_AUTHOR = "Author";
+    private static final String COLUMN_DESCRIPTION = "Description";
 
-    private static final File file = new File("src/main/resources/books.csv");
-    private final CsvMapper mapper = new CsvMapper();
-    private final CsvSchema schema = CsvSchema.builder()
-            .addColumn("id", CsvSchema.ColumnType.NUMBER)
-            .addColumn("title")
-            .addColumn("author")
-            .addColumn("description")
-            .setUseHeader(true)
-            .setColumnSeparator(',')
-            .build();
+    private final JdbcTemplate template;
 
-    public List<Book> findAll() throws IOException {
-        MappingIterator<Book> it = mapper.readerFor(Book.class)
-                .with(schema)
-                .readValues(file);
-        return it.readAll();
+    public BooksRepository(JdbcTemplate jdbcTemplate) {
+        this.template = jdbcTemplate;
     }
 
-    public void saveAll(List<Book> books) throws IOException {
-        mapper.writerFor(Book.class)
-                .with(schema)
-                .writeValues(file)
-                .writeAll(books);
+    public Optional<Book> findById(long id) {
+        String sql = "SELECT * FROM Book WHERE Book_ID = ?";
+
+        try {
+            return Optional.ofNullable(template.queryForObject(sql, (rs, _) -> new Book(
+                    rs.getLong(COLUMN_ID),
+                    rs.getString(COLUMN_TITLE),
+                    rs.getString(COLUMN_AUTHOR),
+                    rs.getString(COLUMN_DESCRIPTION)
+            ), id));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<Book> findByTitle(String title) {
+        String sql = "SELECT * FROM Book WHERE Title = ?";
+
+        try {
+            return Optional.ofNullable(template.queryForObject(sql, (rs, _) -> new Book(
+                    rs.getLong(COLUMN_ID),
+                    rs.getString(COLUMN_TITLE),
+                    rs.getString(COLUMN_AUTHOR),
+                    rs.getString(COLUMN_DESCRIPTION)
+            ), title));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    public List<Book> findAll() {
+        String sql = "SELECT * FROM Book";
+
+        return template.query(sql, (rs, _) -> new Book(
+                rs.getLong(COLUMN_ID),
+                rs.getString(COLUMN_TITLE),
+                rs.getString(COLUMN_AUTHOR),
+                rs.getString(COLUMN_DESCRIPTION)
+        ));
+    }
+
+    public int create(Book book) {
+        String sql = "INSERT INTO Book (Title, Author, Description) VALUES (?, ?, ?)";
+
+        return template.update(sql, book.getTitle(), book.getAuthor(), book.getDescription());
+    }
+
+    public int update(Book book) {
+        String sql = "UPDATE Book Set Title = ?, Author = ?, Description = ? WHERE Book_ID = ?";
+
+        return template.update(sql, book.getTitle(), book.getAuthor(), book.getDescription(), book.getId());
+    }
+
+    public int deleteById(long id) {
+        String sql = "DELETE FROM Book WHERE Book_ID = ?";
+
+        return template.update(sql, id);
+    }
+
+    public int deleteByTitle(String title) {
+        String sql = "DELETE FROM Book WHERE Title = ?";
+
+        return template.update(sql, title);
     }
 }

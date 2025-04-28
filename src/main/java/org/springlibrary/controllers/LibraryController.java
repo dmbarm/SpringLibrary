@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springlibrary.exceptions.BookNotFoundException;
 import org.springlibrary.exceptions.BookPersistenceException;
-import org.springlibrary.exceptions.DuplicateBookException;
 import org.springlibrary.exceptions.InvalidBookException;
 import org.springlibrary.models.Book;
 import org.springlibrary.services.LibraryService;
@@ -32,7 +31,6 @@ public class LibraryController {
     }
 
     public void startBookManagement() {
-        libraryService.startSession();
         boolean exit = false;
 
         ioService.print(message.getMessage("welcome"));
@@ -79,7 +77,7 @@ public class LibraryController {
             if (logger.isInfoEnabled()) {
                 logger.info("{}", message.getMessage("book.add.success"));
             }
-        } catch (InvalidBookException | DuplicateBookException e) {
+        } catch (InvalidBookException e) {
             logger.error(FORMAT_TWO_PARTS, message.getMessage("book.add.failed.user"), e.getMessage());
         } catch (BookPersistenceException e) {
             logger.error(FORMAT_TWO_PARTS, message.getMessage("book.add.failed.system"), e.getMessage());

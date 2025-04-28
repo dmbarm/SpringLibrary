@@ -20,7 +20,7 @@ public class MessagesService {
     }
 
     public void selectLanguage() {
-        String language = ioService.prompt("Select language (en/pl/ru):");
+        String language = ioService.prompt("Select language (en/pl/ru)");
         this.locale = switch (language) {
             case "pl" -> Locale.of("pl");
             case "ru" -> Locale.of("ru");
