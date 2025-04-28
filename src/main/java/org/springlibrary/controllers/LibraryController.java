@@ -31,7 +31,6 @@ public class LibraryController {
     }
 
     public void startBookManagement() {
-        libraryService.startSession();
         boolean exit = false;
 
         ioService.print(message.getMessage("welcome"));

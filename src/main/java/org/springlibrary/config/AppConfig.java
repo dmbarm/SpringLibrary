@@ -10,7 +10,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import java.util.Locale;
 
 @Configuration
-@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @ComponentScan(basePackages = "org.springlibrary")
 public class AppConfig {
     @Bean
