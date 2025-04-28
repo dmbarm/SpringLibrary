@@ -1,16 +1,21 @@
 [versions]
 spring = "6.2.6"
-jackson = "2.19.0"
+jakarta-annotation = "3.0.0"
 postgres = "42.7.5"
 hikaricp = "6.3.0"
+slf4j = "2.0.17"
+logback = "1.5.18"
 
 [libraries]
 spring-context = { module = "org.springframework:spring-context", version.ref = "spring" }
 spring-jdbc = { module = "org.springframework:spring-jdbc", version.ref = "spring" }
-jackson-csv = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-csv", version.ref = "jackson" }
+jakarta-annotation = { module = "jakarta.annotation:jakarta.annotation-api", version.ref = "jakarta-annotation"}
 postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
 hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 
 [bundles]
-spring = ["spring-context", "spring-jdbc"]
+spring = ["spring-context", "spring-jdbc", "jakarta-annotation"]
 database = ["postgres", "hikaricp"]
+logging = ["slf4j-api", "logback-classic"]

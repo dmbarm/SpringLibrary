@@ -1,43 +1,40 @@
 package org.springlibrary.repositories;
 
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springlibrary.models.Book;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 @Repository
 public class BooksRepository {
 
-    private static final File file = new File("src/main/resources/books.csv");
-    private final CsvMapper mapper = new CsvMapper();
-    private final CsvSchema schema = CsvSchema.builder()
-            .addColumn("id", CsvSchema.ColumnType.NUMBER)
-            .addColumn("title")
-            .addColumn("author")
-            .addColumn("description")
-            .setUseHeader(true)
-            .setColumnSeparator(',')
-            .build();
+    private final JdbcTemplate template;
 
-    public BooksRepository() {
+    public BooksRepository(JdbcTemplate jdbcTemplate) {
+        this.template = jdbcTemplate;
     }
 
-    public List<Book> findAll() throws IOException {
-        MappingIterator<Book> it = mapper.readerFor(Book.class)
-                .with(schema)
-                .readValues(file);
-        return it.readAll();
+    public List<Book> findAll() {
+        String sql = "SELECT * FROM Book";
+
+        return template.query(sql, (rs, _) -> new Book(
+                rs.getLong("Book_ID"),
+                rs.getString("Title"),
+                rs.getString("Author"),
+                rs.getString("Description")
+        ));
     }
 
-    public void saveAll(List<Book> books) throws IOException {
-        mapper.writerFor(Book.class)
-                .with(schema)
-                .writeValues(file)
-                .writeAll(books);
+    public void saveAll(List<Book> books) {
+        String sql = "UPDATE Book SET Title = ?, Author = ?, Description = ? WHERE Book_ID = ?";
+
+        template.batchUpdate(sql, books, books.size(),
+                (ps, book) -> {
+                    ps.setString(1, book.getTitle());
+                    ps.setString(2, book.getAuthor());
+                    ps.setString(3, book.getDescription());
+                    ps.setLong(4, book.getId());
+                });
     }
 }

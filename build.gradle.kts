@@ -11,8 +11,8 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.spring)
-    implementation(libs.jackson.csv)
     implementation(libs.bundles.database)
+    implementation(libs.bundles.logging)
 }
 
 tasks.test {

@@ -117,6 +117,7 @@ public class LibraryController {
 
     // Helper
     private String getFormattedBookView(Book book) {
+        System.out.println("Test: " + book.getTitle());
         return MessageFormat.format(message.getMessage("book.view.format"),
                 book.getId(),
                 book.getTitle(),

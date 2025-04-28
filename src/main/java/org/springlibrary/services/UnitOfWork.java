@@ -1,11 +1,9 @@
 package org.springlibrary.services;
 
 import org.springframework.stereotype.Component;
-import org.springlibrary.exceptions.BookPersistenceException;
 import org.springlibrary.models.Book;
 import org.springlibrary.repositories.BooksRepository;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -54,18 +52,10 @@ public class UnitOfWork {
     }
 
     public void commit() {
-        try {
-            booksRepository.saveAll(booksCopy);
-        } catch (IOException e) {
-            throw new BookPersistenceException("Failed to commit changes.", e);
-        }
+        booksRepository.saveAll(booksCopy);
     }
 
     public void reload() {
-        try {
-            this.booksCopy = new ArrayList<>(booksRepository.findAll());
-        } catch (IOException e) {
-            throw new BookPersistenceException("Failed to reload books", e);
-        }
+        this.booksCopy = new ArrayList<>(booksRepository.findAll());
     }
 }
