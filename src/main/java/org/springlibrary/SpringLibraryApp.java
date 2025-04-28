@@ -5,6 +5,6 @@ import org.springlibrary.config.AppConfig;
 
 public class SpringLibraryApp {
     public static void main(String[] args) {
-        AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext(AppConfig.class);
+        new AnnotationConfigApplicationContext(AppConfig.class);
     }
 }

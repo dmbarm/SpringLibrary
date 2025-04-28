@@ -3,7 +3,6 @@ package org.springlibrary.controllers;
 import org.springframework.stereotype.Controller;
 import org.springlibrary.exceptions.BookNotFoundException;
 import org.springlibrary.exceptions.BookPersistenceException;
-import org.springlibrary.exceptions.DuplicateBookException;
 import org.springlibrary.exceptions.InvalidBookException;
 import org.springlibrary.models.Book;
 import org.springlibrary.services.InputService;
@@ -26,7 +25,6 @@ public class LibraryController {
     }
 
     public void startBookManagement() {
-        libraryService.startSession();
         boolean exit = false;
 
         System.out.println(message.getMessage("welcome"));
@@ -67,7 +65,7 @@ public class LibraryController {
         try {
             libraryService.addBook(new Book(title, author, description));
             System.out.println(message.getMessage("book.add.success"));
-        } catch (InvalidBookException | DuplicateBookException e) {
+        } catch (InvalidBookException e) {
             System.err.println(message.getMessage("book.add.failed.user") + ": " + message.getMessage(e.getMessage()));
         } catch (BookPersistenceException e) {
             System.err.println(message.getMessage("book.add.failed.system"));
