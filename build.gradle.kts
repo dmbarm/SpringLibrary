@@ -13,6 +13,7 @@ dependencies {
     implementation(libs.bundles.spring)
     implementation(libs.bundles.database)
     implementation(libs.bundles.logging)
+    implementation(libs.aspectjweaver)
 }
 
 tasks.test {

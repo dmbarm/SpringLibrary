@@ -1,121 +1,137 @@
 package org.springlibrary.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springlibrary.exceptions.BookNotFoundException;
 import org.springlibrary.exceptions.BookPersistenceException;
 import org.springlibrary.exceptions.InvalidBookException;
 import org.springlibrary.models.Book;
-import org.springlibrary.services.InputService;
 import org.springlibrary.services.LibraryService;
 import org.springlibrary.services.MessagesService;
+import org.springlibrary.services.io.ConsoleService;
+import org.springlibrary.services.io.IOService;
 
 import java.text.MessageFormat;
 import java.util.List;
 
 @Controller
 public class LibraryController {
-    private final InputService input;
+    private static final Logger logger = LoggerFactory.getLogger(LibraryController.class);
+    private static final String FORMAT_TWO_PARTS = "{}: {}";
+
+    private final IOService ioService;
     private final MessagesService message;
     private final LibraryService libraryService;
 
-    public LibraryController(InputService inputService, MessagesService messagesService, LibraryService libraryService) {
-        this.input = inputService;
+    public LibraryController(ConsoleService consoleService, MessagesService messagesService, LibraryService libraryService) {
+        this.ioService = consoleService;
         this.message = messagesService;
         this.libraryService = libraryService;
     }
 
     public void startBookManagement() {
+        libraryService.startSession();
         boolean exit = false;
 
-        System.out.println(message.getMessage("welcome"));
+        ioService.print(message.getMessage("welcome"));
         while (!exit) {
-            System.out.println(message.getMessage("choose.option"));
-            System.out.println("1) " + message.getMessage("option.1"));
-            System.out.println("2) " + message.getMessage("option.2"));
-            System.out.println("3) " + message.getMessage("option.3"));
-            System.out.println("4) " + message.getMessage("option.4"));
-            System.out.println("e) " + message.getMessage("option.e"));
+            ioService.print(message.getMessage("choose.option"));
+            ioService.print("1) " + message.getMessage("option.1"));
+            ioService.print("2) " + message.getMessage("option.2"));
+            ioService.print("3) " + message.getMessage("option.3"));
+            ioService.print("4) " + message.getMessage("option.4"));
+            ioService.print("e) " + message.getMessage("option.e"));
 
-            String input = this.input.prompt("\n" + message.getMessage("prompt.choose"));
+            String userInput = this.ioService.prompt("\n" + message.getMessage("prompt.choose"));
 
-            switch (input) {
+            switch (userInput) {
                 case "1" -> displayBookList();
                 case "2" -> createNewBook();
                 case "3" -> editBook();
                 case "4" -> deleteBook();
                 case "e" -> exit = true;
-                default -> System.out.println(message.getMessage("invalid.option"));
+                default -> {
+                    if (logger.isWarnEnabled()) {
+                        logger.warn(message.getMessage("invalid.option"));
+                    }
+                }
             }
-            System.out.println();
+            ioService.print("");
         }
     }
 
     private void displayBookList() {
         List<Book> booksList = libraryService.getAllBooks();
         for (Book book : booksList) {
-            System.out.println(getFormattedBookView(book));
+            ioService.print(getFormattedBookView(book));
         }
     }
 
     private void createNewBook() {
-        String title = input.prompt(message.getMessage("prompt.title"));
-        String author = input.prompt(message.getMessage("prompt.author"));
-        String description = input.prompt(message.getMessage("prompt.description"));
+        String title = ioService.prompt(message.getMessage("prompt.title"));
+        String author = ioService.prompt(message.getMessage("prompt.author"));
+        String description = ioService.prompt(message.getMessage("prompt.description"));
 
         try {
             libraryService.addBook(new Book(title, author, description));
-            System.out.println(message.getMessage("book.add.success"));
+            if (logger.isInfoEnabled()) {
+                logger.info("{}", message.getMessage("book.add.success"));
+            }
         } catch (InvalidBookException e) {
-            System.err.println(message.getMessage("book.add.failed.user") + ": " + message.getMessage(e.getMessage()));
+            logger.error(FORMAT_TWO_PARTS, message.getMessage("book.add.failed.user"), e.getMessage());
         } catch (BookPersistenceException e) {
-            System.err.println(message.getMessage("book.add.failed.system"));
+            logger.error(FORMAT_TWO_PARTS, message.getMessage("book.add.failed.system"), e.getMessage());
         }
     }
 
     private void editBook() {
-        String userInput = input.prompt(message.getMessage("prompt.find.idOrTitle"));
+        String userInput = ioService.prompt(message.getMessage("prompt.find.idOrTitle"));
 
         Book book;
         try {
             book = libraryService.findByIdOrTitle(userInput);
         } catch (BookNotFoundException e) {
-            System.err.println(message.getMessage("error.book.notfound"));
+            logger.error(FORMAT_TWO_PARTS, message.getMessage("error.book.notfound"), e.getMessage());
             return;
         }
 
-        String title = input.prompt(message.getMessage("prompt.new.title"));
+        String title = ioService.prompt(message.getMessage("prompt.new.title"));
         if (!title.isBlank()) book.setTitle(title);
 
-        String author = input.prompt(message.getMessage("prompt.new.author"));
+        String author = ioService.prompt(message.getMessage("prompt.new.author"));
         if (!author.isBlank()) book.setAuthor(author);
 
-        String description = input.prompt(message.getMessage("prompt.new.description"));
+        String description = ioService.prompt(message.getMessage("prompt.new.description"));
         if (!description.isBlank()) book.setDescription(description);
 
         try {
             libraryService.updateBook(book);
-            System.out.println(message.getMessage("book.update.success"));
+            if (logger.isInfoEnabled()) {
+                logger.info("{}", message.getMessage("book.update.success"));
+            }
         } catch (BookNotFoundException | InvalidBookException e) {
-            System.err.println(message.getMessage("book.update.failed.user") + ": " + message.getMessage(e.getMessage()));
+            logger.error(FORMAT_TWO_PARTS, message.getMessage("book.update.failed.user"), e.getMessage());
         } catch (BookPersistenceException e) {
-            System.err.println(message.getMessage("book.update.failed.system"));
+            logger.error(FORMAT_TWO_PARTS, message.getMessage("book.update.failed.system"), e.getMessage());
         }
     }
 
     private void deleteBook() {
-        String userInput = input.prompt(message.getMessage("prompt.find.idOrTitle"));
+        String userInput = ioService.prompt(message.getMessage("prompt.find.idOrTitle"));
 
         try {
             libraryService.deleteByIdOrTitle(userInput);
-            System.out.println(message.getMessage("book.delete.success"));
+            if (logger.isInfoEnabled()) {
+                logger.info("{}", message.getMessage("book.delete.success"));
+            }
         } catch (BookNotFoundException e) {
-            System.err.println(message.getMessage("book.delete.failed.user") + ": " + message.getMessage(e.getMessage()));
+            logger.error(FORMAT_TWO_PARTS, message.getMessage("book.delete.failed.user"), e.getMessage());
         }
     }
 
     // Helper
     private String getFormattedBookView(Book book) {
-        System.out.println("Test: " + book.getTitle());
         return MessageFormat.format(message.getMessage("book.view.format"),
                 book.getId(),
                 book.getTitle(),

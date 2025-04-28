@@ -2,29 +2,31 @@ package org.springlibrary.services;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springlibrary.services.io.ConsoleService;
+import org.springlibrary.services.io.IOService;
 
 import java.util.Locale;
 
 @Service
 public class MessagesService {
     private final MessageSource messageSource;
-    private final InputService inputService;
+    private final IOService ioService;
 
     private Locale locale;
 
-    public MessagesService(MessageSource messageSource, InputService inputService) {
+    public MessagesService(MessageSource messageSource, ConsoleService consoleService) {
         this.messageSource = messageSource;
-        this.inputService = inputService;
+        this.ioService = consoleService;
     }
 
     public void selectLanguage() {
-        String language = inputService.prompt("Select language (en/pl/ru)");
+        String language = ioService.prompt("Select language (en/pl/ru):");
         this.locale = switch (language) {
             case "pl" -> Locale.of("pl");
             case "ru" -> Locale.of("ru");
             case "en" -> Locale.of("en");
             default -> {
-                System.out.println("Invalid language. Defaulting to English.");
+                ioService.print("Invalid language. Defaulting to English.");
                 yield Locale.ENGLISH;
             }
         };
