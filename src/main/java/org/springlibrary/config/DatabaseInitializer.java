@@ -1,7 +1,6 @@
 package org.springlibrary.config;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,20 +26,20 @@ public class DatabaseInitializer {
     public DatabaseInitializer(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-
     @PostConstruct
-    @Transactional
     public void init() {
-        Session session = sessionFactory.getCurrentSession();
-        try {
-            long count = (session
-                    .createNativeQuery("SELECT COUNT(*) FROM Book", Number.class)
-                    .getSingleResult())
-                    .longValue();
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            long count = session
+                    .createNativeQuery("SELECT COUNT(b) FROM Book b", Long.class)
+                    .getSingleResult();
 
             if (count == 0) {
                 session.createNativeQuery(readSqlFile(fillUrl), Void.class).executeUpdate();
             }
+
+            session.getTransaction().commit();
         } catch (IOException e) {
             throw new DatabaseInitializationException("Failed to initialize database: " + e.getMessage(), e);
         }
