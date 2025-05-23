@@ -4,14 +4,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springlibrary.models.Book;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public class BooksRepository {
 
     private final SessionFactory sessionFactory;
@@ -63,7 +61,7 @@ public class BooksRepository {
         Session session = sessionFactory.getCurrentSession();
 
         String hql = "DELETE FROM Book b WHERE b.id = :id";
-        Query<Book> query = session.createQuery(hql, Book.class);
+        Query<?> query = (Query<?>) session.createMutationQuery(hql);
         query.setParameter("id", id);
         return query.executeUpdate();
     }
@@ -72,7 +70,7 @@ public class BooksRepository {
         Session session = sessionFactory.getCurrentSession();
 
         String hql = "DELETE FROM Book b WHERE b.title = :title";
-        Query<Book> query = session.createQuery(hql, Book.class);
+        Query<?> query = (Query<?>) session.createMutationQuery(hql);
         query.setParameter("title", title);
         return query.executeUpdate();
     }

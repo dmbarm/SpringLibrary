@@ -1,6 +1,7 @@
 package org.springlibrary.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springlibrary.exceptions.BookNotFoundException;
 import org.springlibrary.exceptions.InvalidBookException;
 import org.springlibrary.models.Book;
@@ -17,10 +18,12 @@ public class LibraryService {
         this.booksRepository = booksRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<Book> getAllBooks() {
         return booksRepository.findAll();
     }
 
+    @Transactional
     public void addBook(Book book) {
         if (book.getTitle() == null || book.getTitle().isBlank()) {
             throw new InvalidBookException("error.book.title.empty");
@@ -33,6 +36,7 @@ public class LibraryService {
         booksRepository.create(book);
     }
 
+    @Transactional
     public Book findByIdOrTitle(String input) {
         Optional<Book> result;
 
@@ -46,6 +50,7 @@ public class LibraryService {
         return result.orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
     }
 
+    @Transactional
     public void updateBook(Book book) {
         boolean updated = booksRepository.update(book);
 
@@ -54,6 +59,7 @@ public class LibraryService {
         }
     }
 
+    @Transactional
     public void deleteByIdOrTitle(String input) {
         int deleted;
 
