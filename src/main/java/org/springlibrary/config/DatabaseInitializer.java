@@ -4,15 +4,15 @@ import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springlibrary.exceptions.DatabaseInitializationException;
-import org.springlibrary.models.Book;
 
 import java.io.IOException;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
 
 
 @Component
@@ -31,23 +31,23 @@ public class DatabaseInitializer {
     @PostConstruct
     @Transactional
     public void init() {
-        try (Session session = sessionFactory.openSession()) {
-            Long count = session.createQuery("SELECT COUNT(b) FROM Book b", Long.class).getSingleResult();
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            long count = (session
+                    .createNativeQuery("SELECT COUNT(*) FROM Book", Number.class)
+                    .getSingleResult())
+                    .longValue();
+
             if (count == 0) {
-                List<Book> books = readBooksFromFile(fillUrl);
-                Transaction tx = session.beginTransaction();
-                for (Book b : books) {
-                    session.persist(b);
-                }
-                tx.commit();
+                session.createNativeQuery(readSqlFile(fillUrl), Void.class).executeUpdate();
             }
         } catch (IOException e) {
             throw new DatabaseInitializationException("Failed to initialize database: " + e.getMessage(), e);
         }
     }
 
-    private List<Book> readBooksFromFile(String fileName) throws IOException {
-        // TODO: parse books
-        throw new UnsupportedOperationException("TODO: implement parsing logic");
+    private String readSqlFile(String fileName) throws IOException {
+        Resource resource = new ClassPathResource(fileName.replace("classpath:", ""));
+        return new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
     }
 }
