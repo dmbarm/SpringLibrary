@@ -4,21 +4,21 @@ import org.springframework.stereotype.Service;
 import org.springlibrary.exceptions.BookNotFoundException;
 import org.springlibrary.exceptions.InvalidBookException;
 import org.springlibrary.models.Book;
-import org.springlibrary.repositories.BooksRepository;
+import org.springlibrary.dao.BooksDao;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class LibraryService {
-    private final BooksRepository booksRepository;
+    private final BooksDao booksDao;
 
-    public LibraryService(BooksRepository booksRepository) {
-        this.booksRepository = booksRepository;
+    public LibraryService(BooksDao booksDao) {
+        this.booksDao = booksDao;
     }
 
     public List<Book> getAllBooks() {
-        return booksRepository.findAll();
+        return booksDao.findAll();
     }
 
     public void addBook(Book book) {
@@ -30,7 +30,7 @@ public class LibraryService {
             throw new InvalidBookException("error.book.author.empty");
         }
 
-        booksRepository.create(book);
+        booksDao.create(book);
     }
 
     public Book findByIdOrTitle(String input) {
@@ -38,16 +38,16 @@ public class LibraryService {
 
         if (input.matches("\\d+")) {
             int id = Integer.parseInt(input);
-            result = booksRepository.findById(id);
+            result = booksDao.findById(id);
         } else {
-            result = booksRepository.findByTitle(input);
+            result = booksDao.findByTitle(input);
         }
 
         return result.orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
     }
 
     public void updateBook(Book book) {
-        int updated = booksRepository.update(book);
+        int updated = booksDao.update(book);
 
         if (updated == 0) {
             throw new BookNotFoundException("error.book.notfound");
@@ -59,9 +59,9 @@ public class LibraryService {
 
         if (input.matches("\\d+")) {
             int id = Integer.parseInt(input);
-            deleted = booksRepository.deleteById(id);
+            deleted = booksDao.deleteById(id);
         } else {
-            deleted = booksRepository.deleteByTitle(input);
+            deleted = booksDao.deleteByTitle(input);
         }
 
         if (deleted == 0) {

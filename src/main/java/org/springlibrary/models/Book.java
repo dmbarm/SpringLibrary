@@ -1,10 +1,22 @@
 package org.springlibrary.models;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "book")
 public class Book {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String author;
+
+    @Column(nullable = false, length = 2000)
     private String description;
 
     public Book() {}
