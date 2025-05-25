@@ -1,9 +1,12 @@
 package org.springlibrary.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "book")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Book {
 
     @Id

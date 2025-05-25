@@ -69,6 +69,10 @@ public class DatabaseConfig {
         properties.put("hibernate.hbm2ddl.auto", hbm2ddlAuto);
         properties.put("hibernate.format_sql", formatSql);
 
+        properties.put("hibernate.cache.use_second_level_cache", true);
+        properties.put("hibernate.cache.region.factory_class", "org.hibernate.cache.jcache.JCacheRegionFactory");
+        properties.put("hibernate.javax.cache.provider", "org.ehcache.jsr107.EhcacheCachingProvider");
+
         factoryBean.setHibernateProperties(properties);
         return factoryBean;
     }
