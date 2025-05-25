@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "book")
+@Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Book {
 
@@ -25,13 +26,6 @@ public class Book {
     public Book() {}
 
     public Book(String title, String author, String description) {
-        this.title = title;
-        this.author = author;
-        this.description = description;
-    }
-
-    public Book(long id, String title, String author, String description) {
-        this.id = id;
         this.title = title;
         this.author = author;
         this.description = description;

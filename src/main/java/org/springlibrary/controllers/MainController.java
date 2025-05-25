@@ -18,6 +18,9 @@ public class MainController {
 
     @EventListener(ContextRefreshedEvent.class)
     public void startUserInput() {
+        if (System.console() == null) {
+            return;
+        }
         messagesService.selectLanguage();
         libraryController.startBookManagement();
     }

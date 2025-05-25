@@ -72,6 +72,8 @@ public class DatabaseConfig {
         properties.put("hibernate.cache.use_second_level_cache", true);
         properties.put("hibernate.cache.region.factory_class", "org.hibernate.cache.jcache.JCacheRegionFactory");
         properties.put("hibernate.javax.cache.provider", "org.ehcache.jsr107.EhcacheCachingProvider");
+        properties.put("hibernate.cache.use_query_cache", true);
+        properties.put("hibernate.generate_statistics", true);
 
         factoryBean.setHibernateProperties(properties);
         return factoryBean;

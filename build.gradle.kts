@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.bundles.database)
     implementation(libs.bundles.logging)
     implementation(libs.aspectjweaver)
+    testImplementation(libs.bundles.test)
 }
 
 tasks.test {
