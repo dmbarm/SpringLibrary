@@ -1,9 +1,7 @@
 package org.springlibrary.repositories;
 
-import org.hibernate.SessionFactory;
 import org.hibernate.stat.Statistics;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -17,8 +15,6 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 @SpringJUnitConfig(classes = {TestAppConfig.class, DatabaseConfig.class})
 class BooksRepositoryHibernateCacheTests {
 
-    @Autowired
-    private SessionFactory sessionFactory;
     @Autowired
     private Statistics stats;
     @Autowired
@@ -39,6 +35,12 @@ class BooksRepositoryHibernateCacheTests {
         });
 
         stats.clear();
+    }
+
+    @AfterEach
+    void cleanUp() {
+        TransactionTemplate tmpl = new TransactionTemplate(txManager);
+        tmpl.executeWithoutResult(_ -> repo.deleteByTitle("Title"));
     }
 
     @Test
