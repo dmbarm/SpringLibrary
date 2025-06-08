@@ -1,7 +1,7 @@
-CREATE TABLE book
+CREATE TABLE Book
 (
-    id          BIGSERIAL PRIMARY KEY,
-    title       VARCHAR(255),
-    author      VARCHAR(255),
-    description VARCHAR(2000)
+    BookId          BIGSERIAL PRIMARY KEY,
+    Title       VARCHAR(255),
+    Author      VARCHAR(255),
+    Description VARCHAR(2000)
 );

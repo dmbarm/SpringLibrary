@@ -33,7 +33,7 @@ public class LibraryService {
             throw new InvalidBookException("error.book.author.empty");
         }
 
-        booksRepository.create(book);
+        booksRepository.save(book);
     }
 
     @Transactional
@@ -41,7 +41,7 @@ public class LibraryService {
         Optional<Book> result;
 
         if (input.matches("\\d+")) {
-            int id = Integer.parseInt(input);
+            long id = Long.parseLong(input);
             result = booksRepository.findById(id);
         } else {
             result = booksRepository.findByTitle(input);
@@ -52,11 +52,11 @@ public class LibraryService {
 
     @Transactional
     public void updateBook(Book book) {
-        boolean updated = booksRepository.update(book);
-
-        if (!updated) {
+        if (!booksRepository.existsById(book.getId())) {
             throw new BookNotFoundException("error.book.notfound");
         }
+
+        booksRepository.save(book);
     }
 
     @Transactional
@@ -64,14 +64,18 @@ public class LibraryService {
         int deleted;
 
         if (input.matches("\\d+")) {
-            int id = Integer.parseInt(input);
-            deleted = booksRepository.deleteById(id);
+            long id = Long.parseLong(input);
+
+            if (!booksRepository.existsById(id)) {
+                throw new BookNotFoundException("error.book.notfound");
+            }
+
+            booksRepository.deleteById(id);
         } else {
             deleted = booksRepository.deleteByTitle(input);
-        }
-
-        if (deleted == 0) {
-            throw new BookNotFoundException("error.book.notfound");
+            if (deleted == 0) {
+                throw new BookNotFoundException("error.book.notfound");
+            }
         }
     }
 }
