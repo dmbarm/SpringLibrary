@@ -1,6 +1,8 @@
 [versions]
 spring-boot = "3.5.0"
 postgre-sql = "42.7.6"
+hibernate = "7.0.0.Final"
+ehcache = "3.10.8"
 
 
 [libraries]
@@ -9,8 +11,10 @@ spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-
 spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop", version.ref = "spring-boot"}
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 postgresql-driver = { module = "org.postgresql:postgresql", version.ref = "postgre-sql"}
+hibernate-jcache = { module = "org.hibernate.orm:hibernate-jcache", version.ref = "hibernate"}
+ehcache = { module = "org.ehcache:ehcache", version.ref = "ehcache" }
 
 [bundles]
 spring = ["spring-boot-starter", "spring-boot-starter-data-jpa", "spring-boot-starter-aop"]
-database = ["postgresql-driver"]
+database = ["postgresql-driver", "hibernate-jcache" ,"ehcache"]
 test = ["spring-boot-starter-test"]
