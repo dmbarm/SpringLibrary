@@ -1,12 +1,11 @@
 package org.springlibrary.controllers;
 
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Controller;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 import org.springlibrary.services.MessagesService;
 
-@Controller
-public class MainController {
+@Component
+public class MainController implements CommandLineRunner {
     private final MessagesService messagesService;
     private final LibraryController libraryController;
 
@@ -16,8 +15,8 @@ public class MainController {
         this.libraryController = libraryController;
     }
 
-    @EventListener(ContextRefreshedEvent.class)
-    public void startUserInput() {
+    @Override
+    public void run(String... args) {
         if (System.console() == null) {
             return;
         }

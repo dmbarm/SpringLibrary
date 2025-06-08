@@ -11,9 +11,7 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.spring)
-    implementation(libs.bundles.database)
-    implementation(libs.bundles.logging)
-    implementation(libs.aspectjweaver)
+    runtimeOnly(libs.bundles.database)
     testImplementation(libs.bundles.test)
 }
 
