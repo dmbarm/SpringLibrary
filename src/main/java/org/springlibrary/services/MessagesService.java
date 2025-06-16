@@ -2,7 +2,6 @@ package org.springlibrary.services;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import org.springlibrary.services.io.ConsoleService;
 import org.springlibrary.services.io.IOService;
 
 import java.util.Locale;
@@ -12,11 +11,11 @@ public class MessagesService {
     private final MessageSource messageSource;
     private final IOService ioService;
 
-    private Locale locale;
+    private Locale locale = Locale.ENGLISH;
 
-    public MessagesService(MessageSource messageSource, ConsoleService consoleService) {
+    public MessagesService(MessageSource messageSource, IOService ioService) {
         this.messageSource = messageSource;
-        this.ioService = consoleService;
+        this.ioService = ioService;
     }
 
     public void selectLanguage() {

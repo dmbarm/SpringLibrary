@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-configuration>
+    <session-factory>
+
+        <property name="hibernate.connection.provider_class">com.zaxxer.hikari.hibernate.HikariConnectionProvider</property>
+        <property name="hibernate.hikari.jdbcUrl">jdbc:postgresql://localhost:5432/db</property>
+        <property name="hibernate.hikari.driverClassName">org.postgresql.Driver</property>
+        <property name="hibernate.hikari.username">dmitriy</property>
+        <property name="hibernate.hikari.password">password</property>
+        <property name="hibernate.hikari.maximumPoolSize">10</property>
+
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.JCacheRegionFactory</property>
+        <property name="hibernate.javax.cache.provider">org.ehcache.jsr107.EhcacheCachingProvider</property>
+        <property name="hibernate.cache.use_query_cache">true</property>
+        <property name="hibernate.generate_statistics">true</property>
+    </session-factory>
+</hibernate-configuration>

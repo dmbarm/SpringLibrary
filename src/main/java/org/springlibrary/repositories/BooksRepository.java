@@ -1,7 +1,12 @@
 package org.springlibrary.repositories;
 
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaDelete;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springlibrary.models.Book;
 
@@ -10,79 +15,73 @@ import java.util.Optional;
 
 @Repository
 public class BooksRepository {
-    private static final String COLUMN_ID = "Book_ID";
-    private static final String COLUMN_TITLE = "Title";
-    private static final String COLUMN_AUTHOR = "Author";
-    private static final String COLUMN_DESCRIPTION = "Description";
 
-    private final JdbcTemplate template;
+    private final SessionFactory sessionFactory;
 
-    public BooksRepository(JdbcTemplate jdbcTemplate) {
-        this.template = jdbcTemplate;
+    public BooksRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     public Optional<Book> findById(long id) {
-        String sql = "SELECT * FROM Book WHERE Book_ID = ?";
+        Session session = sessionFactory.getCurrentSession();
 
-        try {
-            return Optional.ofNullable(template.queryForObject(sql, (rs, _) -> new Book(
-                    rs.getLong(COLUMN_ID),
-                    rs.getString(COLUMN_TITLE),
-                    rs.getString(COLUMN_AUTHOR),
-                    rs.getString(COLUMN_DESCRIPTION)
-            ), id));
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
+        return Optional.ofNullable(session.byId(Book.class).load(id));
     }
 
     public Optional<Book> findByTitle(String title) {
-        String sql = "SELECT * FROM Book WHERE Title = ?";
+        Session session = sessionFactory.getCurrentSession();
 
-        try {
-            return Optional.ofNullable(template.queryForObject(sql, (rs, _) -> new Book(
-                    rs.getLong(COLUMN_ID),
-                    rs.getString(COLUMN_TITLE),
-                    rs.getString(COLUMN_AUTHOR),
-                    rs.getString(COLUMN_DESCRIPTION)
-            ), title));
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
+        Root<Book> root = criteriaQuery.from(Book.class);
+        criteriaQuery.select(root)
+                        .where(criteriaBuilder.equal(root.get("title"), title));
+
+        Query<Book> query = session.createQuery(criteriaQuery);
+        return Optional.ofNullable(query.uniqueResult());
     }
 
     public List<Book> findAll() {
-        String sql = "SELECT * FROM Book";
+        Session session = sessionFactory.getCurrentSession();
 
-        return template.query(sql, (rs, _) -> new Book(
-                rs.getLong(COLUMN_ID),
-                rs.getString(COLUMN_TITLE),
-                rs.getString(COLUMN_AUTHOR),
-                rs.getString(COLUMN_DESCRIPTION)
-        ));
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
+        criteriaQuery.from(Book.class);
+
+        return session.createQuery(criteriaQuery).list();
     }
 
-    public int create(Book book) {
-        String sql = "INSERT INTO Book (Title, Author, Description) VALUES (?, ?, ?)";
-
-        return template.update(sql, book.getTitle(), book.getAuthor(), book.getDescription());
+    public void create(Book book) {
+        Session session = sessionFactory.getCurrentSession();
+        session.persist(book);
     }
 
-    public int update(Book book) {
-        String sql = "UPDATE Book Set Title = ?, Author = ?, Description = ? WHERE Book_ID = ?";
+    public boolean update(Book book) {
+        Session session = sessionFactory.getCurrentSession();
+        var result = session.merge(book);
 
-        return template.update(sql, book.getTitle(), book.getAuthor(), book.getDescription(), book.getId());
+        return result != null;
     }
 
     public int deleteById(long id) {
-        String sql = "DELETE FROM Book WHERE Book_ID = ?";
+        Session session = sessionFactory.getCurrentSession();
 
-        return template.update(sql, id);
+        Book book = session.byId(Book.class).loadOptional(id).orElse(null);
+        if (book != null) {
+            session.remove(book);
+            return 1;
+        }
+        return 0;
     }
 
     public int deleteByTitle(String title) {
-        String sql = "DELETE FROM Book WHERE Title = ?";
+        Session session = sessionFactory.getCurrentSession();
 
-        return template.update(sql, title);
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaDelete<Book> criteriaDelete = criteriaBuilder.createCriteriaDelete(Book.class);
+        Root<Book> root = criteriaDelete.from(Book.class);
+        criteriaDelete.where(criteriaBuilder.equal(root.get("title"), title));
+
+        return session.createMutationQuery(criteriaDelete).executeUpdate();
     }
 }
