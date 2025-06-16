@@ -11,9 +11,9 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.spring)
-    implementation(libs.aspectjweaver)
-    implementation(libs.jackson.csv)
+    implementation(libs.bundles.database)
     implementation(libs.bundles.logging)
+    implementation(libs.aspectjweaver)
 }
 
 tasks.test {

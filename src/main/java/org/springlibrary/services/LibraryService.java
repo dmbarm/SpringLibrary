@@ -2,27 +2,23 @@ package org.springlibrary.services;
 
 import org.springframework.stereotype.Service;
 import org.springlibrary.exceptions.BookNotFoundException;
-import org.springlibrary.exceptions.DuplicateBookException;
 import org.springlibrary.exceptions.InvalidBookException;
 import org.springlibrary.models.Book;
+import org.springlibrary.repositories.BooksRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class LibraryService {
-    private final UnitOfWork uow;
+    private final BooksRepository booksRepository;
 
-    public LibraryService(UnitOfWork uow) {
-        this.uow = uow;
-    }
-
-    public void startSession() {
-        uow.reload();
+    public LibraryService(BooksRepository booksRepository) {
+        this.booksRepository = booksRepository;
     }
 
     public List<Book> getAllBooks() {
-        return uow.getBooksList();
+        return booksRepository.findAll();
     }
 
     public void addBook(Book book) {
@@ -30,15 +26,11 @@ public class LibraryService {
             throw new InvalidBookException("error.book.title.empty");
         }
 
-        book.setId(generateNextId());
-
-        if (uow.getBooksList().stream().anyMatch(b -> b.getId() == book.getId())) {
-            throw new DuplicateBookException("error.book.duplicate");
+        if (book.getAuthor() == null || book.getAuthor().isBlank()) {
+            throw new InvalidBookException("error.book.author.empty");
         }
 
-        uow.add(book);
-
-        uow.commit();
+        booksRepository.create(book);
     }
 
     public Book findByIdOrTitle(String input) {
@@ -46,46 +38,34 @@ public class LibraryService {
 
         if (input.matches("\\d+")) {
             int id = Integer.parseInt(input);
-            result = uow.findById(id);
+            result = booksRepository.findById(id);
         } else {
-            result = uow.findByTitle(input);
+            result = booksRepository.findByTitle(input);
         }
 
         return result.orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
     }
 
     public void updateBook(Book book) {
-        boolean updated = uow.update(book);
+        int updated = booksRepository.update(book);
 
-        if (!updated) {
+        if (updated == 0) {
             throw new BookNotFoundException("error.book.notfound");
         }
-
-        uow.commit();
     }
 
     public void deleteByIdOrTitle(String input) {
-        boolean deleted;
+        int deleted;
 
         if (input.matches("\\d+")) {
             int id = Integer.parseInt(input);
-            deleted = uow.deleteById(id);
+            deleted = booksRepository.deleteById(id);
         } else {
-            deleted = uow.deleteByTitle(input);
+            deleted = booksRepository.deleteByTitle(input);
         }
 
-        if (!deleted) {
+        if (deleted == 0) {
             throw new BookNotFoundException("error.book.notfound");
         }
-
-        uow.commit();
-    }
-
-    // Helper
-    public long generateNextId() {
-        return getAllBooks().stream()
-                .mapToLong(Book::getId)
-                .max()
-                .orElse(0) + 1;
     }
 }
