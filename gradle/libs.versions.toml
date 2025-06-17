@@ -1,8 +1,9 @@
 [versions]
 spring-boot = "3.5.0"
-postgre-sql = "42.7.6"
+postgres-sql = "42.7.6"
 hibernate = "7.0.0.Final"
 ehcache = "3.10.8"
+liquibase = "4.32.0"
 
 
 [libraries]
@@ -10,11 +11,12 @@ spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter",
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
 spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop", version.ref = "spring-boot"}
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
-postgresql-driver = { module = "org.postgresql:postgresql", version.ref = "postgre-sql"}
+postgresql-driver = { module = "org.postgresql:postgresql", version.ref = "postgres-sql"}
 hibernate-jcache = { module = "org.hibernate.orm:hibernate-jcache", version.ref = "hibernate"}
 ehcache = { module = "org.ehcache:ehcache", version.ref = "ehcache" }
+liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibase"}
 
 [bundles]
 spring = ["spring-boot-starter", "spring-boot-starter-data-jpa", "spring-boot-starter-aop"]
-database = ["postgresql-driver", "hibernate-jcache" ,"ehcache"]
+database = ["postgresql-driver", "hibernate-jcache" ,"ehcache", "liquibase"]
 test = ["spring-boot-starter-test"]
