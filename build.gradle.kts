@@ -25,11 +25,10 @@ liquibase {
     activities.register("main") {
         this.arguments = mapOf(
             "logLevel" to "info",
-            "changeLogFile" to dbChangelog,
+            "changelogFile" to dbChangelog,
             "url" to dbUrl,
             "username" to dbUser,
-            "password" to dbPass,
-            "driverClassName" to dbDriver)
+            "password" to dbPass)
     }
 }
 
