@@ -22,14 +22,15 @@ val dbPass = System.getenv("DB_PASSWORD") ?: error("DB_PASSWORD not set")
 val dbDriver = System.getenv("DB_DRIVER") ?: error("DB_DRIVER not set")
 
 liquibase {
-    activities.register<org.liquibase.gradle.Activity>("main") {
-        changeLogFile = dbChangelog
-        url = dbUrl
-        username = dbUser
-        password = dbPass
-        driver = dbDriver
+    activities.register("main") {
+        this.arguments = mapOf(
+            "logLevel" to "info",
+            "changeLogFile" to dbChangelog,
+            "url" to dbUrl,
+            "username" to dbUser,
+            "password" to dbPass,
+            "driverClassName" to dbDriver)
     }
-    runList = "main"
 }
 
 repositories {
@@ -38,8 +39,15 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.spring)
+
     runtimeOnly(libs.bundles.database)
+
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+
     testImplementation(libs.bundles.test)
+
+    liquibaseRuntime(libs.bundles.liquibase)
 }
 
 tasks.test {
