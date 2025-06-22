@@ -1,7 +1,7 @@
 [versions]
-spring-boot = "3.5.0"
+spring-boot = "3.5.1"
 postgres-sql = "42.7.6"
-hibernate = "7.0.0.Final"
+hibernate = "7.0.2.Final"
 ehcache = "3.10.8"
 lombok = "1.18.38"
 liquibase = "4.32.0"
@@ -15,6 +15,7 @@ spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-start
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 postgresql-driver = { module = "org.postgresql:postgresql", version.ref = "postgres-sql"}
 hibernate-jcache = { module = "org.hibernate.orm:hibernate-jcache", version.ref = "hibernate"}
+hibernate-commons-annotations = { module = "org.hibernate.common:hibernate-commons-annotations", version.ref="hibernate"}
 ehcache = { module = "org.ehcache:ehcache", version.ref = "ehcache" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibase"}
@@ -22,6 +23,6 @@ picocli = { module = "info.picocli:picocli", version.ref = "picocli"}
 
 [bundles]
 spring = ["spring-boot-starter", "spring-boot-starter-data-jpa", "spring-boot-starter-aop"]
-database = ["postgresql-driver", "hibernate-jcache" ,"ehcache"]
+database = ["postgresql-driver", "hibernate-jcache", "ehcache", "hibernate-commons-annotations"]
 test = ["spring-boot-starter-test"]
 liquibase = ["liquibase", "postgresql-driver", "picocli"]

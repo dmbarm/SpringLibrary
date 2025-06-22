@@ -15,16 +15,16 @@ java {
     }
 }
 
+val logLevel = findProperty("LOG_LEVEL")?.toString() ?: error("LOG_LEVEL not set")
 val dbChangelog = findProperty("DB_CHANGELOG")?.toString() ?: error("DB_CHANGELOG not set")
-val dbUrl = System.getenv("DB_URL") ?: error("DB_URL not set")
-val dbUser = System.getenv("DB_USER") ?: error("DB_USER not set")
-val dbPass = System.getenv("DB_PASSWORD") ?: error("DB_PASSWORD not set")
-val dbDriver = System.getenv("DB_DRIVER") ?: error("DB_DRIVER not set")
+val dbUrl = findProperty("DB_URL")?.toString() ?: error("DB_URL not set")
+val dbUser = findProperty("DB_USER")?.toString() ?: error("DB_USER not set")
+val dbPass = findProperty("DB_PASSWORD")?.toString() ?: error("DB_PASSWORD not set")
 
 liquibase {
     activities.register("main") {
         this.arguments = mapOf(
-            "logLevel" to "info",
+            "logLevel" to logLevel,
             "changelogFile" to dbChangelog,
             "url" to dbUrl,
             "username" to dbUser,
@@ -51,4 +51,11 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.register("refreshDatabase") {
+    group = "development"
+    description = "Drops and recreated the whole database. Used only in DEVELOPMENT matters"
+    dependsOn("dropAll")
+    finalizedBy("update")
 }
