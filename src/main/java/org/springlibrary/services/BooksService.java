@@ -12,10 +12,11 @@ import org.springlibrary.mappers.BookMapper;
 import org.springlibrary.repositories.BooksRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BooksService {
+    private static final String BOOK_NOT_FOUND_MSG = "error.book.notfound";
+
     private final BooksRepository booksRepository;
 
     public BooksService(BooksRepository booksRepository) {
@@ -29,12 +30,12 @@ public class BooksService {
 
     @Transactional(readOnly = true)
     public BookResponseDTO getById(long id) {
-        return booksRepository.findById(id).map(BookMapper::toDto).orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
+        return booksRepository.findById(id).map(BookMapper::toDto).orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MSG));
     }
 
     @Transactional(readOnly = true)
     public BookResponseDTO getByTitle(String title) {
-        return booksRepository.findByTitle(title).map(BookMapper::toDto).orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
+        return booksRepository.findByTitle(title).map(BookMapper::toDto).orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MSG));
     }
 
     @Transactional
@@ -55,7 +56,7 @@ public class BooksService {
     @Transactional
     public void updateBook(UpdateBookRequestDTO dto) {
         Book book = booksRepository.findById(dto.getId())
-                .orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
+                .orElseThrow(() -> new BookNotFoundException(BOOK_NOT_FOUND_MSG));
 
         if (dto.getTitle() != null && !dto.getTitle().isBlank()) {
             book.setTitle(dto.getTitle());
@@ -73,7 +74,7 @@ public class BooksService {
     @Transactional
     public void deleteById(long id) {
         if (!booksRepository.existsById(id))
-            throw new BookNotFoundException("error.book.notfound");
+            throw new BookNotFoundException(BOOK_NOT_FOUND_MSG);
         booksRepository.deleteById(id);
     }
 
@@ -82,7 +83,7 @@ public class BooksService {
     public void deleteByTitle(String title) {
         int deleted = booksRepository.deleteByTitle(title);
         if (deleted == 0) {
-            throw new BookNotFoundException("error.book.notfound");
+            throw new BookNotFoundException(BOOK_NOT_FOUND_MSG);
         }
     }
 }
