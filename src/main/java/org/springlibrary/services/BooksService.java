@@ -28,17 +28,13 @@ public class BooksService {
     }
 
     @Transactional(readOnly = true)
-    public BookResponseDTO getByIdOrTitle(String input) {
-        Optional<Book> result;
+    public BookResponseDTO getById(long id) {
+        return booksRepository.findById(id).map(BookMapper::toDto).orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
+    }
 
-        if (input.matches("\\d+")) {
-            long id = Long.parseLong(input);
-            result = booksRepository.findById(id);
-        } else {
-            result = booksRepository.findByTitle(input);
-        }
-
-        return result.map(BookMapper::toDto).orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
+    @Transactional(readOnly = true)
+    public BookResponseDTO getByTitle(String title) {
+        return booksRepository.findByTitle(title).map(BookMapper::toDto).orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
     }
 
     @Transactional
@@ -75,22 +71,18 @@ public class BooksService {
     }
 
     @Transactional
-    public void deleteByIdOrTitle(String input) {
-        int deleted;
+    public void deleteById(long id) {
+        if (!booksRepository.existsById(id))
+            throw new BookNotFoundException("error.book.notfound");
+        booksRepository.deleteById(id);
+    }
 
-        if (input.matches("\\d+")) {
-            long id = Long.parseLong(input);
 
-            if (!booksRepository.existsById(id)) {
-                throw new BookNotFoundException("error.book.notfound");
-            }
-
-            booksRepository.deleteById(id);
-        } else {
-            deleted = booksRepository.deleteByTitle(input);
-            if (deleted == 0) {
-                throw new BookNotFoundException("error.book.notfound");
-            }
+    @Transactional
+    public void deleteByTitle(String title) {
+        int deleted = booksRepository.deleteByTitle(title);
+        if (deleted == 0) {
+            throw new BookNotFoundException("error.book.notfound");
         }
     }
 }

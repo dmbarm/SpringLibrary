@@ -25,10 +25,16 @@ public class BooksController {
         return ResponseEntity.ok(booksService.getAllBooks());
     }
 
-    @GetMapping(value = "/{input}")
-    public ResponseEntity<BookResponseDTO> getByIdORTitle(@PathVariable String input) {
-        return ResponseEntity.ok(booksService.getByIdOrTitle(input));
+    @GetMapping(value = "/id/{id}")
+    public ResponseEntity<BookResponseDTO> getById(@PathVariable long id) {
+        return ResponseEntity.ok(booksService.getById(id));
     }
+
+    @GetMapping(value = "title/{title}")
+    public ResponseEntity<BookResponseDTO> getByTitle(@PathVariable String title) {
+        return ResponseEntity.ok(booksService.getByTitle(title));
+    }
+
 
     @PostMapping()
     public ResponseEntity<Long> addBook(@RequestBody CreateBookRequestDTO dto,
@@ -46,9 +52,15 @@ public class BooksController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/{input}")
-    public ResponseEntity<Void> deleteBook(@PathVariable String input) {
-        booksService.deleteByIdOrTitle(input);
+    @DeleteMapping(value = "/id/{id}")
+    public ResponseEntity<Void> deleteBook(@PathVariable long id) {
+        booksService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping(value = "/title/{title}")
+    public ResponseEntity<Void> deleteByTitle(@PathVariable String title) {
+        booksService.deleteByTitle(title);
         return ResponseEntity.noContent().build();
     }
 }
