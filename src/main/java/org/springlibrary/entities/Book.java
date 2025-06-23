@@ -1,4 +1,4 @@
-package org.springlibrary.models;
+package org.springlibrary.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;

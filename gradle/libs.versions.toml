@@ -1,5 +1,5 @@
 [versions]
-spring-boot = "3.5.1"
+spring-boot = "3.5.3"
 postgres-sql = "42.7.6"
 hibernate = "7.0.2.Final"
 ehcache = "3.10.8"
@@ -12,6 +12,8 @@ picocli = "4.7.7"
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
 spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop", version.ref = "spring-boot"}
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "spring-boot"}
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 postgresql-driver = { module = "org.postgresql:postgresql", version.ref = "postgres-sql"}
 hibernate-jcache = { module = "org.hibernate.orm:hibernate-jcache", version.ref = "hibernate"}
@@ -22,7 +24,7 @@ liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibase"
 picocli = { module = "info.picocli:picocli", version.ref = "picocli"}
 
 [bundles]
-spring = ["spring-boot-starter", "spring-boot-starter-data-jpa", "spring-boot-starter-aop"]
+spring = ["spring-boot-starter", "spring-boot-starter-data-jpa", "spring-boot-starter-aop", "spring-boot-starter-web", "spring-boot-starter-validation"]
 database = ["postgresql-driver", "hibernate-jcache", "ehcache", "hibernate-commons-annotations"]
 test = ["spring-boot-starter-test"]
 liquibase = ["liquibase", "postgresql-driver", "picocli"]
