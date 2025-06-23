@@ -1,10 +1,12 @@
 [versions]
 spring-boot = "3.5.3"
+spring-dependency-management = "1.1.7"
 postgres-sql = "42.7.6"
 hibernate = "7.0.2.Final"
 ehcache = "3.10.8"
 lombok = "1.18.38"
 liquibase = "4.32.0"
+liquibase-plugin = "2.2.2"
 picocli = "4.7.7"
 
 
@@ -28,3 +30,8 @@ spring = ["spring-boot-starter", "spring-boot-starter-data-jpa", "spring-boot-st
 database = ["postgresql-driver", "hibernate-jcache", "ehcache", "hibernate-commons-annotations"]
 test = ["spring-boot-starter-test"]
 liquibase = ["liquibase", "postgresql-driver", "picocli"]
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot"}
+io-spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management"}
+liquibase-gradle = { id = "org.liquibase.gradle", version.ref = "liquibase-plugin"}

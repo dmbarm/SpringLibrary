@@ -12,7 +12,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/books")
+@RequestMapping("/api/books")
 public class BooksController {
     private final BooksService booksService;
 
@@ -25,7 +25,7 @@ public class BooksController {
         return ResponseEntity.ok(booksService.getAllBooks());
     }
 
-    @GetMapping("/{input}")
+    @GetMapping(value = "/{input}")
     public ResponseEntity<BookResponseDTO> getByIdORTitle(@PathVariable String input) {
         return ResponseEntity.ok(booksService.getByIdOrTitle(input));
     }
@@ -46,7 +46,7 @@ public class BooksController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{input}")
+    @DeleteMapping(value = "/{input}")
     public ResponseEntity<Void> deleteBook(@PathVariable String input) {
         booksService.deleteByIdOrTitle(input);
         return ResponseEntity.noContent().build();

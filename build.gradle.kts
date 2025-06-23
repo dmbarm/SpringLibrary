@@ -1,6 +1,8 @@
 plugins {
     id("java")
-    id("org.liquibase.gradle") version "2.2.2"
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.io.spring.dependency.management)
+    alias(libs.plugins.liquibase.gradle)
 }
 
 group = "org.example"
@@ -49,7 +51,7 @@ dependencies {
     liquibaseRuntime(libs.bundles.liquibase)
 }
 
-tasks.test {
+tasks.withType<Test> {
     useJUnitPlatform()
 }
 
