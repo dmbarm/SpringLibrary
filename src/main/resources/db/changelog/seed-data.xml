@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="insert-book-seed-data" author="dmitriy">
+        <insert tableName="book">
+            <column name="title" value="The Hobbit"/>
+            <column name="author" value="J.R.R. Tolkien"/>
+            <column name="description" value="A fantasy novel"/>
+        </insert>
+        <insert tableName="book">
+            <column name="title" value="1984"/>
+            <column name="author" value="George Orwell"/>
+            <column name="description" value="Dystopian future"/>
+        </insert>
+        <insert tableName="book">
+            <column name="title" value="Dune"/>
+            <column name="author" value="Frank Herbert"/>
+            <column name="description" value="Sci-fi epic"/>
+        </insert>
+        <insert tableName="book">
+            <column name="title" value="To Kill a Mockingbird"/>
+            <column name="author" value="Harper Lee"/>
+            <column name="description" value="A novel about racial injustice"/>
+        </insert>
+        <insert tableName="book">
+            <column name="title" value="Pride and Prejudice"/>
+            <column name="author" value="Jane Austen"/>
+            <column name="description" value="A romantic novel of manners"/>
+        </insert>
+        <insert tableName="book">
+            <column name="title" value="Brave New World"/>
+            <column name="author" value="Aldous Huxley"/>
+            <column name="description" value="Dystopian science fiction"/>
+        </insert>
+        <insert tableName="book">
+            <column name="title" value="The Great Gatsby"/>
+            <column name="author" value="F. Scott Fitzgerald"/>
+            <column name="description" value="A novel about the American dream"/>
+        </insert>
+        <insert tableName="book">
+            <column name="title" value="Frankenstein"/>
+            <column name="author" value="Mary Shelley"/>
+            <column name="description" value="Gothic science fiction"/>
+        </insert>
+        <insert tableName="book">
+            <column name="title" value="The Catcher in the Rye"/>
+            <column name="author" value="J.D. Salinger"/>
+            <column name="description" value="A story of teenage alienation"/>
+        </insert>
+        <insert tableName="book">
+            <column name="title" value="The Lord of the Rings"/>
+            <column name="author" value="J.R.R. Tolkien"/>
+            <column name="description" value="An epic high fantasy adventure"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

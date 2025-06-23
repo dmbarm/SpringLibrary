@@ -1,10 +1,11 @@
 package org.springlibrary;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springlibrary.config.AppConfig;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class SpringLibraryApp {
     public static void main(String[] args) {
-        new AnnotationConfigApplicationContext(AppConfig.class);
+        SpringApplication.run(SpringLibraryApp.class, args);
     }
 }

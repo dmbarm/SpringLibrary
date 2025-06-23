@@ -18,7 +18,7 @@ public class CachingAspect {
     private static final Logger logger = LoggerFactory.getLogger(CachingAspect.class);
     private static final Map<String, Object> booksCache = new HashMap<>();
 
-    @Around("execution(* org.springlibrary..*(..)) && !execution(* org.springlibrary.services.io..*(..))")
+    @Around("execution(* org.springlibrary..*(..))")
     public Object checkCache(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
 

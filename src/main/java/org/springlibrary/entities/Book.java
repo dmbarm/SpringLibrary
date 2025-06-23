@@ -1,6 +1,8 @@
-package org.springlibrary.models;
+package org.springlibrary.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -8,6 +10,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "book")
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Getter
+@Setter
 public class Book {
 
     @Id
@@ -36,31 +40,4 @@ public class Book {
         return id + ". '" + title + "' by " + author + ". " + description + ".";
     }
 
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }
