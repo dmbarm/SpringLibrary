@@ -17,6 +17,7 @@ spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-b
 spring-boot-starter-aop = { module = "org.springframework.boot:spring-boot-starter-aop", version.ref = "spring-boot"}
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "spring-boot"}
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "spring-boot"}
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 postgresql-driver = { module = "org.postgresql:postgresql", version.ref = "postgres-sql"}
 hibernate-jcache = { module = "org.hibernate.orm:hibernate-jcache", version.ref = "hibernate"}
@@ -27,7 +28,8 @@ liquibase = { module = "org.liquibase:liquibase-core", version.ref = "liquibase"
 picocli = { module = "info.picocli:picocli", version.ref = "picocli"}
 
 [bundles]
-spring = ["spring-boot-starter", "spring-boot-starter-data-jpa", "spring-boot-starter-aop", "spring-boot-starter-web", "spring-boot-starter-validation", "spring-boot-starter-data-mongodb"]
+spring = ["spring-boot-starter", "spring-boot-starter-data-jpa", "spring-boot-starter-aop", "spring-boot-starter-web",
+    "spring-boot-starter-validation", "spring-boot-starter-data-mongodb", "spring-boot-starter-security"]
 database = ["postgresql-driver", "hibernate-jcache", "ehcache", "hibernate-commons-annotations"]
 test = ["spring-boot-starter-test"]
 liquibase = ["liquibase", "postgresql-driver", "picocli"]
