@@ -28,8 +28,16 @@ public class ControllerExceptionHandler {
                 .body(messagesService.getMessage(e.getMessage()));
     }
 
+    @ExceptionHandler(MongoDbStoringException.class)
+    public ResponseEntity<String> handleMongoDbStoring(final MongoDbStoringException e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(messagesService.getMessage(e.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneral(final Exception e) {
+        e.printStackTrace();
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(messagesService.getMessage("error.internal-server"));
