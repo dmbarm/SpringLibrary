@@ -1,7 +1,7 @@
 package org.springlibrary.mappers;
 
-import org.springlibrary.dtos.BookResponseDTO;
-import org.springlibrary.dtos.CreateBookRequestDTO;
+import org.springlibrary.dtos.books.BookResponseDTO;
+import org.springlibrary.dtos.books.CreateBookRequestDTO;
 import org.springlibrary.entities.Book;
 
 public class BookMapper {

@@ -2,14 +2,16 @@ package org.springlibrary.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Collection;
 
-@Entity
 @Getter
 @Setter
-@Table(name = "\"User\"")
+@NoArgsConstructor
+@Entity
+@Table(name = "user")
 public class User {
 
     @Id
@@ -33,4 +35,9 @@ public class User {
             )
     )
     private Collection<Role> roles;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }

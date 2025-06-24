@@ -1,4 +1,4 @@
-package org.springlibrary.dtos;
+package org.springlibrary.dtos.books;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

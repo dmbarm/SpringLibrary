@@ -9,7 +9,7 @@
     <include file="src/main/resources/db/changelog/data/data-001-seed-roles.xml"/>
 
     <!-- * DEV * -->
-    <include file="src/main/resources/db/changelog/dev/dev-001-seed-data.xml"/>
+    <include file="src/main/resources/db/changelog/dev/dev-001-seed-books.xml"/>
     <include file="src/main/resources/db/changelog/dev/dev-002-seed-image-file-id.xml"/>
     <include file="src/main/resources/db/changelog/dev/dev-003-seed-users-and-users-roles.xml"/>
 </databaseChangeLog>

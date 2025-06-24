@@ -1,5 +1,6 @@
 package org.springlibrary.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.http.HttpHeaders;
@@ -9,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
-import org.springlibrary.dtos.BookResponseDTO;
-import org.springlibrary.dtos.CreateBookRequestDTO;
-import org.springlibrary.dtos.UpdateBookRequestDTO;
+import org.springlibrary.dtos.books.BookResponseDTO;
+import org.springlibrary.dtos.books.CreateBookRequestDTO;
+import org.springlibrary.dtos.books.UpdateBookRequestDTO;
 import org.springlibrary.services.BooksService;
 
 import java.net.URI;
@@ -32,19 +33,19 @@ public class BooksController {
         return ResponseEntity.ok(booksService.getAllBooks());
     }
 
-    @GetMapping(value = "/id/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<BookResponseDTO> getById(@PathVariable long id) {
         return ResponseEntity.ok(booksService.getById(id));
     }
 
-    @GetMapping(value = "/title/{title}")
+    @GetMapping("/title/{title}")
     public ResponseEntity<BookResponseDTO> getByTitle(@PathVariable String title) {
         return ResponseEntity.ok(booksService.getByTitle(title));
     }
 
 
     @PostMapping()
-    public ResponseEntity<Long> addBook(@RequestBody CreateBookRequestDTO dto,
+    public ResponseEntity<Long> addBook(@Valid @RequestBody CreateBookRequestDTO dto,
                                         UriComponentsBuilder uriBuilder) {
         long id = booksService.addBook(dto);
 
@@ -54,24 +55,24 @@ public class BooksController {
     }
 
     @PatchMapping()
-    public ResponseEntity<Void> updateBook(@RequestBody UpdateBookRequestDTO dto) {
+    public ResponseEntity<Void> updateBook(@Valid @RequestBody UpdateBookRequestDTO dto) {
         booksService.updateBook(dto);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/id/{id}")
+    @DeleteMapping("/id/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable long id) {
         booksService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/title/{title}")
+    @DeleteMapping("/title/{title}")
     public ResponseEntity<Void> deleteByTitle(@PathVariable String title) {
         booksService.deleteByTitle(title);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "id/{id}/image")
+    @GetMapping("id/{id}/image")
     public ResponseEntity<Resource> downloadImage(@PathVariable("id") long bookId) {
         GridFsResource resource = booksService.getImage(bookId);
 
@@ -86,7 +87,7 @@ public class BooksController {
                 .body(resource);
     }
 
-    @PostMapping(value = "id/{id}/image")
+    @PostMapping("id/{id}/image")
     public ResponseEntity<Void> uploadImage(@PathVariable("id") long bookId, @RequestParam("book_cover") MultipartFile file) {
         booksService.addImage(bookId, file);
         return ResponseEntity.noContent().build();
