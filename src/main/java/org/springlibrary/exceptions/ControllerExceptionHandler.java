@@ -21,8 +21,8 @@ public class ControllerExceptionHandler {
                 .body(messagesService.getMessage(e.getMessage()));
     }
 
-    @ExceptionHandler(InvalidBookException.class)
-    public ResponseEntity<String> handleInvalid(final InvalidBookException e) {
+    @ExceptionHandler({InvalidBookException.class, DuplicateUserException.class})
+    public ResponseEntity<String> handleInvalid(final Exception e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(messagesService.getMessage(e.getMessage()));

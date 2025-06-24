@@ -3,6 +3,8 @@ package org.springlibrary.mappers;
 import org.springlibrary.dtos.users.RegisterUserDTO;
 import org.springlibrary.entities.User;
 
+import java.util.List;
+
 public class UserMapper {
     private UserMapper() {}
 
