@@ -1,5 +1,7 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <include file="src/main/resources/db/changelog/create-books-table.xml"/>
-    <include file="src/main/resources/db/changelog/seed-data.xml"/>
+    <include file="src/main/resources/db/changelog/001-create-books-table.xml"/>
+    <include file="src/main/resources/db/changelog/002-seed-data.xml"/>
+    <include file="src/main/resources/db/changelog/003-add-image-file-id.xml"/>
+    <include file="src/main/resources/db/changelog/004-fill-image-file-id.xml"/>
 </databaseChangeLog>

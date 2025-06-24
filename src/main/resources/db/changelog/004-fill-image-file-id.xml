@@ -1,0 +1,58 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="dmitriy" id="4">
+        <update tableName="book">
+            <column name="image_file_id" value="6859edcd2a8efal1190bd707"/>
+            <where>title = 'The Hobbit'</where>
+        </update>
+
+        <update tableName="book">
+            <column name="image_file_id" value="6859edcd2a8efal1190bd710"/>
+            <where>title = '1984'</where>
+        </update>
+
+        <update tableName="book">
+            <column name="image_file_id" value="6859edcd2a8efal1190bd70c"/>
+            <where>title = 'Dune'</where>
+        </update>
+
+        <update tableName="book">
+            <column name="image_file_id" value="6859edcd2a8efal1190bd70a"/>
+            <where>title = 'To Kill a Mockingbird'</where>
+        </update>
+
+        <update tableName="book">
+            <column name="image_file_id" value="6859edcd2a8efal1190bd701"/>
+            <where>title = 'Pride and Prejudice'</where>
+        </update>
+
+        <update tableName="book">
+            <column name="image_file_id" value="6859edcd2a8efal1190bd705"/>
+            <where>title = 'Brave New World'</where>
+        </update>
+
+        <update tableName="book">
+            <column name="image_file_id" value="6859edcd2a8efal1190bd703"/>
+            <where>title = 'The Great Gatsby'</where>
+        </update>
+
+        <update tableName="book">
+            <column name="image_file_id" value="6859edcd2a8efal1190bd6fc"/>
+            <where>title = 'Frankenstein'</where>
+        </update>
+
+        <update tableName="book">
+            <column name="image_file_id" value="6859edcd2a8efal1190bd6ff"/>
+            <where>title = 'The Catcher in the Rye'</where>
+        </update>
+
+        <update tableName="book">
+            <column name="image_file_id" value="6859edcd2a8efal1190bd70e"/>
+            <where>title = 'The Lord of the Rings'</where>
+        </update>
+    </changeSet>
+</databaseChangeLog>

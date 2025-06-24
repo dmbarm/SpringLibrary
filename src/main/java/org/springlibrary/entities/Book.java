@@ -27,12 +27,22 @@ public class Book {
     @Column(nullable = false, length = 2000)
     private String description;
 
+    @Column(length = 24, name = "image_file_id")
+    private String imageFileId;
+
     public Book() {}
 
     public Book(String title, String author, String description) {
         this.title = title;
         this.author = author;
         this.description = description;
+    }
+
+    public Book(String title, String author, String description, String imageFileId) {
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.imageFileId = imageFileId;
     }
 
     @Override
