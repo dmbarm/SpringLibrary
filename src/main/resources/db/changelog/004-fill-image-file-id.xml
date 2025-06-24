@@ -6,52 +6,52 @@
 
     <changeSet author="dmitriy" id="4">
         <update tableName="book">
-            <column name="image_file_id" value="6859edcd2a8efal1190bd707"/>
+            <column name="image_file_id" value="685a9bb0281714e6caee8745"/>
             <where>title = 'The Hobbit'</where>
         </update>
 
         <update tableName="book">
-            <column name="image_file_id" value="6859edcd2a8efal1190bd710"/>
+            <column name="image_file_id" value="685a9bb0281714e6caee874e"/>
             <where>title = '1984'</where>
         </update>
 
         <update tableName="book">
-            <column name="image_file_id" value="6859edcd2a8efal1190bd70c"/>
+            <column name="image_file_id" value="685a9bb0281714e6caee874a"/>
             <where>title = 'Dune'</where>
         </update>
 
         <update tableName="book">
-            <column name="image_file_id" value="6859edcd2a8efal1190bd70a"/>
+            <column name="image_file_id" value="685a9bb0281714e6caee8748"/>
             <where>title = 'To Kill a Mockingbird'</where>
         </update>
 
         <update tableName="book">
-            <column name="image_file_id" value="6859edcd2a8efal1190bd701"/>
+            <column name="image_file_id" value="685a9bb0281714e6caee873f"/>
             <where>title = 'Pride and Prejudice'</where>
         </update>
 
         <update tableName="book">
-            <column name="image_file_id" value="6859edcd2a8efal1190bd705"/>
+            <column name="image_file_id" value="685a9bb0281714e6caee8743"/>
             <where>title = 'Brave New World'</where>
         </update>
 
         <update tableName="book">
-            <column name="image_file_id" value="6859edcd2a8efal1190bd703"/>
+            <column name="image_file_id" value="685a9bb0281714e6caee8741"/>
             <where>title = 'The Great Gatsby'</where>
         </update>
 
         <update tableName="book">
-            <column name="image_file_id" value="6859edcd2a8efal1190bd6fc"/>
+            <column name="image_file_id" value="685a9bb0281714e6caee873a"/>
             <where>title = 'Frankenstein'</where>
         </update>
 
         <update tableName="book">
-            <column name="image_file_id" value="6859edcd2a8efal1190bd6ff"/>
+            <column name="image_file_id" value="685a9bb0281714e6caee873d"/>
             <where>title = 'The Catcher in the Rye'</where>
         </update>
 
         <update tableName="book">
-            <column name="image_file_id" value="6859edcd2a8efal1190bd70e"/>
+            <column name="image_file_id" value="685a9bb0281714e6caee874c"/>
             <where>title = 'The Lord of the Rings'</where>
         </update>
     </changeSet>

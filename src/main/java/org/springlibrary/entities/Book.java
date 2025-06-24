@@ -28,7 +28,7 @@ public class Book {
     private String description;
 
     @Column(length = 24, name = "image_file_id")
-    private String imageFileId;
+    private String bookCoverFileId;
 
     public Book() {}
 
@@ -38,11 +38,11 @@ public class Book {
         this.description = description;
     }
 
-    public Book(String title, String author, String description, String imageFileId) {
+    public Book(String title, String author, String description, String bookCoverFileId) {
         this.title = title;
         this.author = author;
         this.description = description;
-        this.imageFileId = imageFileId;
+        this.bookCoverFileId = bookCoverFileId;
     }
 
     @Override

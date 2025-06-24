@@ -6,7 +6,9 @@
 
     <changeSet author="dmitriy" id="3">
         <addColumn tableName="book">
-            <column name="image_file_id" type="varchar(24)" nullable="true"/>
+            <column name="image_file_id" type="VARCHAR(24)">
+                <constraints nullable="true"/>
+            </column>
         </addColumn>
     </changeSet>
 </databaseChangeLog>
