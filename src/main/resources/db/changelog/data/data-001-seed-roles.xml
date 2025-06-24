@@ -4,11 +4,12 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet author="dmitriy" id="3">
-        <addColumn tableName="book">
-            <column name="image_file_id" type="VARCHAR(24)">
-                <constraints nullable="true"/>
-            </column>
-        </addColumn>
+    <changeSet author="dmitriy" id="data-001">
+        <insert tableName="role">
+            <column name="name" value="admin"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="user"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

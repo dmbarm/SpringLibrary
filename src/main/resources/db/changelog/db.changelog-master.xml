@@ -1,7 +1,15 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <include file="src/main/resources/db/changelog/001-create-books-table.xml"/>
-    <include file="src/main/resources/db/changelog/002-seed-data.xml"/>
-    <include file="src/main/resources/db/changelog/003-add-image-file-id.xml"/>
-    <include file="src/main/resources/db/changelog/004-fill-image-file-id.xml"/>
+    <!-- * SCHEMA * -->
+    <include file="src/main/resources/db/changelog/schema/schema-001-create-books-table.xml"/>
+    <include file="src/main/resources/db/changelog/schema/schema-002-add-image-file-id.xml"/>
+    <include file="src/main/resources/db/changelog/schema/schema-003-create-users-and-roles-tables.xml"/>
+
+    <!-- * DATA * -->
+    <include file="src/main/resources/db/changelog/data/data-001-seed-roles.xml"/>
+
+    <!-- * DEV * -->
+    <include file="src/main/resources/db/changelog/dev/dev-001-seed-data.xml"/>
+    <include file="src/main/resources/db/changelog/dev/dev-002-seed-image-file-id.xml"/>
+    <include file="src/main/resources/db/changelog/dev/dev-003-seed-users-and-users-roles.xml"/>
 </databaseChangeLog>

@@ -4,7 +4,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet author="dmitriy" id="4">
+    <changeSet author="dmitriy" id="dev-002">
         <update tableName="book">
             <column name="image_file_id" value="685a9bb0281714e6caee8745"/>
             <where>title = 'The Hobbit'</where>
