@@ -2,6 +2,8 @@ package org.springlibrary.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springlibrary.services.MessagesService;
@@ -14,8 +16,8 @@ public class ControllerExceptionHandler {
         this.messagesService = messagesService;
     }
 
-    @ExceptionHandler(BookNotFoundException.class)
-    public ResponseEntity<String> handleNotFound(final BookNotFoundException e) {
+    @ExceptionHandler({BookNotFoundException.class, UserNotFoundException.class, RoleNotFoundException.class})
+    public ResponseEntity<String> handleNotFound(final Exception e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(messagesService.getMessage(e.getMessage()));
@@ -32,6 +34,20 @@ public class ControllerExceptionHandler {
     public ResponseEntity<String> handleMongoDbStoring(final MongoDbStoringException e) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(messagesService.getMessage(e.getMessage()));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<String> handleAuthentication(final AuthenticationException e) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(messagesService.getMessage(e.getMessage()));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<String> handleAccessDenied(final AccessDeniedException e) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
                 .body(messagesService.getMessage(e.getMessage()));
     }
 

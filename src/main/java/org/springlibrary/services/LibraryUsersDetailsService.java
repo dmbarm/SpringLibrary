@@ -4,9 +4,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springlibrary.entities.User;
+import org.springlibrary.exceptions.UserNotFoundException;
 import org.springlibrary.repositories.UsersRepository;
 
 import java.util.List;
@@ -23,12 +23,10 @@ public class LibraryUsersDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         User user = usersRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("error.user.notfound"));
-
-        List<GrantedAuthority> grantedAuthorities = parseUserAuthorities(user);
+                .orElseThrow(() -> new UserNotFoundException("error.user.notfound"));
 
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(), user.getPassword(), grantedAuthorities);
+                user.getUsername(), user.getPassword(), parseUserAuthorities(user));
     }
 
     private List<GrantedAuthority> parseUserAuthorities(User user) {

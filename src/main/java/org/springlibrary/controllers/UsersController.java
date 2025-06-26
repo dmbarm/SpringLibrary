@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springlibrary.dtos.users.LoginUserDTO;
 import org.springlibrary.dtos.users.RegisterUserDTO;
 import org.springlibrary.services.UsersService;
 
@@ -19,9 +20,15 @@ public class UsersController {
         this.usersService = usersService;
     }
 
-    @PostMapping()
-    public ResponseEntity<Void> register(@Valid @RequestBody RegisterUserDTO dto) {
-        usersService.register(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterUserDTO dto) {
+        String jwtToken = usersService.register(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(jwtToken);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginUserDTO dto) {
+        String jwtToken = usersService.login(dto);
+        return ResponseEntity.ok(jwtToken);
     }
 }

@@ -40,6 +40,7 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.spring)
+    implementation(libs.bundles.jwt)
 
     runtimeOnly(libs.bundles.database)
 
