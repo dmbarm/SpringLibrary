@@ -6,10 +6,10 @@
 
     <changeSet author="dmitriy" id="data-001">
         <insert tableName="role">
-            <column name="name" value="admin"/>
+            <column name="name" value="ADMIN"/>
         </insert>
         <insert tableName="role">
-            <column name="name" value="user"/>
+            <column name="name" value="USER"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

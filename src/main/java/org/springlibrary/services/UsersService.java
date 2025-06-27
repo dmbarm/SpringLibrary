@@ -1,12 +1,12 @@
 package org.springlibrary.services;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springlibrary.dtos.users.LoginUserDTO;
 import org.springlibrary.dtos.users.RegisterUserDTO;
+import org.springlibrary.dtos.users.UserResponseDTO;
 import org.springlibrary.entities.Role;
 import org.springlibrary.entities.User;
 import org.springlibrary.exceptions.DuplicateUserException;
@@ -47,13 +47,13 @@ public class UsersService {
 
         User user = UserMapper.toEntity(dto);
 
-        Role userRole = rolesRepository.findByName("ROLE_USER")
+        Role userRole = rolesRepository.findByName("USER")
                 .orElseThrow(() -> new RoleNotFoundException("error.role.notfound"));
         user.setRoles(List.of(userRole));
 
         usersRepository.save(user);
 
-        return jwtService.generateToken(user.getUsername());
+        return jwtService.generateToken(user);
     }
 
     @Transactional
@@ -67,6 +67,11 @@ public class UsersService {
         User user = usersRepository.findByUsername(dto.getUsername())
                 .orElseThrow(() -> new UserNotFoundException("error.user.notfound"));
 
-        return jwtService.generateToken(user.getUsername());
+        return jwtService.generateToken(user);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserResponseDTO> getAllUsers() {
+        return usersRepository.findAll().stream().map(UserMapper::toDTO).toList();
     }
 }

@@ -1,5 +1,6 @@
 package org.springlibrary.aspects;
 
+import lombok.SneakyThrows;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,8 +15,9 @@ import java.util.Arrays;
 public class LoggingAspect {
     private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
+    @SneakyThrows
     @Around("execution(* org.springlibrary.services..*(..))")
-    public Object logMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object logMethod(ProceedingJoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().toShortString();
         Object[] args = joinPoint.getArgs();
 

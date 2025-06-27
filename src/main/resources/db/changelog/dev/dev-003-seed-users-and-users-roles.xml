@@ -5,13 +5,15 @@
      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet author="dmitriy" id="dev-003">
-        <insert tableName="user">
+        <insert tableName="lib_user">
             <column name="username" value="testAdmin"/>
-            <column name="password" value="$2a$12$vIkPMRycrXl4GNIvfqkZ5uCOh5kC7O3qtwTI0q.u2fMFMjnWWzr/y"/>
+            <column name="password" value="$2a$10$j4kDjajApcz27Z/92D0wRe9naSN4g4qfQ58T/rPsqDyCjXlywiW3K"/>
+            <!-- password: testAdminPass -->
         </insert>
-        <insert tableName="user">
+        <insert tableName="lib_user">
             <column name="username" value="testUser"/>
-            <column name="password" value="$2a$12$0.q7s/o039LTHObyBIfnl.JBTErVHfMgTlHOZPWjTOfgbj/DA4NrS"/>
+            <column name="password" value="$2a$10$o0u5qzedWSvqKojYMtehouvqg7JKzPQ3GvMsirs.Pc4MSdTeANvhe"/>
+            <!-- password: testUserPass -->
         </insert>
 
         <insert tableName="users_roles">
