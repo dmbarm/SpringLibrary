@@ -1,25 +1,23 @@
 package org.springlibrary.aspects;
 
+import lombok.SneakyThrows;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-@Aspect
-@Component
 public class CachingAspect {
     private static final Logger logger = LoggerFactory.getLogger(CachingAspect.class);
     private static final Map<String, Object> booksCache = new HashMap<>();
 
+    @SneakyThrows
     @Around("execution(* org.springlibrary..*(..))")
-    public Object checkCache(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object checkCache(ProceedingJoinPoint joinPoint) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
 
         if (methodSignature.getReturnType().equals(Void.TYPE)) {

@@ -1,21 +1,26 @@
 package org.springlibrary.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "book")
 @Cacheable
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-@Getter
-@Setter
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "book_id")
     private long id;
 
     @Column(nullable = false)
@@ -29,8 +34,6 @@ public class Book {
 
     @Column(length = 24, name = "image_file_id")
     private String bookCoverFileId;
-
-    public Book() {}
 
     public Book(String title, String author, String description) {
         this.title = title;

@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="2" author="dmitriy">
+    <changeSet author="dmitriy" id="dev-001">
         <insert tableName="book">
             <column name="title" value="The Hobbit"/>
             <column name="author" value="J.R.R. Tolkien"/>

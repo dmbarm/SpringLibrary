@@ -1,4 +1,4 @@
-package org.springlibrary.dtos;
+package org.springlibrary.dtos.books;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
