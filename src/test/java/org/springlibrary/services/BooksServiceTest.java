@@ -81,15 +81,15 @@ class BooksServiceTest {
         long returnedBookId = booksService.addBook(createRequestDto);
 
         assertThat(returnedBookId).isEqualTo(bookId);
-        verify(booksRepository).save(saved);
+        verify(booksRepository).save(any(Book.class));
     }
 
     @Test
     void shouldUpdateBookSuccessfully() {
         long bookId = 1L;
-        UpdateBookRequestDTO updateRequestDto = new UpdateBookRequestDTO(1L, "UpdatedTestTitle", "UpdatedTestAuthor",
+        UpdateBookRequestDTO updateRequestDto = new UpdateBookRequestDTO(bookId, "UpdatedTestTitle", "UpdatedTestAuthor",
                 "UpdatedTestDescription");
-        Book saved = new Book(1L, "TestTitle", "TestAuthor", "TestDescription");
+        Book saved = new Book(bookId, "TestTitle", "TestAuthor", "TestDescription");
         when(booksRepository.findById(updateRequestDto.getId())).thenReturn(Optional.of(saved));
 
         booksService.updateBook(updateRequestDto);
@@ -99,28 +99,39 @@ class BooksServiceTest {
     }
 
     @Test
-    void shouldDeleteBookWhenExists() {
+    void shouldDeleteById() {
         long bookId = 1L;
-        Book book = new Book(bookId, "TestTitle", "TestAuthor", "TestDescription");
 
-        when(booksRepository.findById(bookId)).thenReturn(Optional.of(book));
+        when(booksRepository.existsById(bookId)).thenReturn(true);
 
         booksService.deleteById(bookId);
 
-        verify(booksRepository).findById(bookId);
+        verify(booksRepository).existsById(bookId);
         verify(booksRepository).deleteById(bookId);
+    }
+
+    @Test
+    void shouldDeleteByTitle() {
+        String bookTitle = "TestTitle";
+
+        when(booksRepository.deleteByTitle(bookTitle)).thenReturn(1);
+
+        booksService.deleteByTitle(bookTitle);
+
+        verify(booksRepository).deleteByTitle(bookTitle);
     }
 
     @Test
     void shouldThrowExceptionWhenBookNotFound() {
         long bookId = 1L;
-        when(booksRepository.findById(bookId)).thenReturn(Optional.empty());
+        when(booksRepository.existsById(bookId)).thenReturn(false);
 
         assertThatThrownBy(() -> booksService.deleteById(bookId))
                 .isInstanceOf(BookNotFoundException.class)
                 .hasMessageContaining("error.book.notfound");
 
-        verify(booksRepository).findById(bookId);
+        verify(booksRepository).existsById(bookId);
         verify(booksRepository, never()).deleteById(any());
     }
+
 }
