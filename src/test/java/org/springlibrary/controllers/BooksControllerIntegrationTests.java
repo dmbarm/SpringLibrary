@@ -7,15 +7,15 @@ import org.junit.jupiter.api.extension.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springlibrary.config.TestContainersConfig;
 import org.springlibrary.entities.Book;
 import org.springlibrary.repositories.BooksRepository;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.hamcrest.Matchers.containsString;
@@ -25,17 +25,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Testcontainers
+@Import(TestContainersConfig.class)
 @WithMockUser(username = "admin", roles = {"ROLE_ADMIN"})
 class BooksControllerIntegrationTests {
     private static final String BOOK_NAME = "TestBook";
     private static final String BOOK_AUTHOR = "TestAuthor";
     private static final String BOOK_DESCRIPTION = "TestBook";
-
-    @Container
-    static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest")
-            .withDatabaseName("testDb")
-            .withUsername("testUser")
-            .withPassword("testPassword");
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,10 +39,10 @@ class BooksControllerIntegrationTests {
     private BooksRepository booksRepository;
 
     @DynamicPropertySource
-    static void propertiesConfiguration(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
-        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+    static void overrideProps(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", TestContainersConfig.POSTGRES_CONTAINER::getJdbcUrl);
+        registry.add("spring.datasource.username", TestContainersConfig.POSTGRES_CONTAINER::getUsername);
+        registry.add("spring.datasource.password", TestContainersConfig.POSTGRES_CONTAINER::getPassword);
     }
 
     @BeforeEach
