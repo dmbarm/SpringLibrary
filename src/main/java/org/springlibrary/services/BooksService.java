@@ -61,8 +61,7 @@ public class BooksService {
             throw new InvalidBookException("error.book.author.empty");
         }
 
-        Book book = BookMapper.toEntity(dto);
-        booksRepository.save(book);
+        Book book = booksRepository.save(BookMapper.toEntity(dto));
         return book.getId();
     }
 
