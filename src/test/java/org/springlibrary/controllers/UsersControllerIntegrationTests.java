@@ -1,8 +1,10 @@
 package org.springlibrary.controllers;
 
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +14,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springlibrary.config.TestContainersConfig;
+import org.springlibrary.entities.Role;
+import org.springlibrary.repositories.RolesRepository;
 import org.springlibrary.repositories.UsersRepository;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -20,11 +24,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 @AutoConfigureMockMvc
 @Testcontainers
 @Import(TestContainersConfig.class)
-class UsersControllerIntegrationTests extends IntegrationTestBase {
+class UsersControllerIntegrationTests extends IntegrationTestsBase {
     private static final String USERNAME = "TestUser";
     private static final String PASSWORD = "TestPassword";
 
@@ -34,8 +39,17 @@ class UsersControllerIntegrationTests extends IntegrationTestBase {
     @Autowired
     private UsersRepository usersRepository;
 
+    @Autowired
+    private RolesRepository rolesRepository;
+
+    @BeforeAll
+    void setup() {
+        rolesRepository.save(new Role("ADMIN"));
+        rolesRepository.save(new Role("USER"));
+    }
+
     @BeforeEach
-    void prepareDatabase() {
+    void clearDatabase() {
         usersRepository.deleteAll();
     }
 
@@ -88,6 +102,7 @@ class UsersControllerIntegrationTests extends IntegrationTestBase {
                 .andExpect(jsonPath("$.length()").value(3));
     }
 
+    //String as return type is kept in case some other methods would require jwt token for something
     @SneakyThrows
     private String createTestUser(String username, String password) {
         String json = String.format("""

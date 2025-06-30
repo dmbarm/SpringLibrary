@@ -3,6 +3,7 @@ package org.springlibrary.controllers;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,15 +20,16 @@ import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 @AutoConfigureMockMvc
 @Testcontainers
 @Import(TestContainersConfig.class)
 @WithMockUser(username = "admin", roles = {"ADMIN"})
-class BooksControllerIntegrationTests {
+class BooksControllerIntegrationTests extends IntegrationTestsBase {
     private static final String BOOK_NAME = "TestBook";
     private static final String BOOK_AUTHOR = "TestAuthor";
-    private static final String BOOK_DESCRIPTION = "TestBook";
+    private static final String BOOK_DESCRIPTION = "TestDescription";
 
     @Autowired
     private MockMvc mockMvc;
@@ -36,7 +38,7 @@ class BooksControllerIntegrationTests {
     private BooksRepository booksRepository;
 
     @BeforeEach
-    void setupDatabase() {
+    void clearDatabase() {
         booksRepository.deleteAll();
     }
 
@@ -108,6 +110,7 @@ class BooksControllerIntegrationTests {
                             "title": "ChangedTestBook",
                             "author": "ChangedTestAuthor",
                             "description": "ChangedTestDescription"
+                        }
                 """, bookId);
 
         mockMvc.perform(patch("/api/books")

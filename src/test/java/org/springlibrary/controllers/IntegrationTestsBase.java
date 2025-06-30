@@ -4,7 +4,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springlibrary.config.TestContainersConfig;
 
-public abstract class IntegrationTestBase {
+public abstract class IntegrationTestsBase {
 
     @DynamicPropertySource
     static void overrideProperties(DynamicPropertyRegistry registry) {
