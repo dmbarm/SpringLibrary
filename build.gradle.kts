@@ -48,6 +48,8 @@ dependencies {
     annotationProcessor(libs.lombok)
 
     testImplementation(libs.bundles.test)
+    testCompileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
 
     liquibaseRuntime(libs.bundles.liquibase)
 }
