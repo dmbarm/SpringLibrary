@@ -3,18 +3,15 @@ package org.springlibrary.controllers;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springlibrary.config.TestContainersConfig;
-import org.springlibrary.entities.Book;
 import org.springlibrary.repositories.BooksRepository;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -26,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Testcontainers
 @Import(TestContainersConfig.class)
-@WithMockUser(username = "admin", roles = {"ROLE_ADMIN"})
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 class BooksControllerIntegrationTests {
     private static final String BOOK_NAME = "TestBook";
     private static final String BOOK_AUTHOR = "TestAuthor";
@@ -38,26 +35,22 @@ class BooksControllerIntegrationTests {
     @Autowired
     private BooksRepository booksRepository;
 
-    @DynamicPropertySource
-    static void overrideProps(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", TestContainersConfig.POSTGRES_CONTAINER::getJdbcUrl);
-        registry.add("spring.datasource.username", TestContainersConfig.POSTGRES_CONTAINER::getUsername);
-        registry.add("spring.datasource.password", TestContainersConfig.POSTGRES_CONTAINER::getPassword);
-    }
-
     @BeforeEach
     void setupDatabase() {
         booksRepository.deleteAll();
-        booksRepository.save(new Book("Book", "Author", "Description"));
     }
 
     @SneakyThrows
     @Test
     void shouldReturnAllBooks() {
+        int index = 1;
+        createTestBook(BOOK_NAME + index, BOOK_AUTHOR + index, BOOK_DESCRIPTION + index++);
+        createTestBook(BOOK_NAME + index, BOOK_AUTHOR + index, BOOK_DESCRIPTION + index++);
+        createTestBook(BOOK_NAME + index, BOOK_AUTHOR + index, BOOK_DESCRIPTION + index);
+
         mockMvc.perform(get("/api/books"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].title").value("TestBook"));
+                .andExpect(jsonPath("$.length()").value(3));
     }
 
     @SneakyThrows
@@ -91,7 +84,7 @@ class BooksControllerIntegrationTests {
                 }""";
 
         mockMvc.perform(post("/api/books")
-                        .contentType(String.valueOf(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBook))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", containsString("/books/")))
@@ -118,7 +111,7 @@ class BooksControllerIntegrationTests {
                 """, bookId);
 
         mockMvc.perform(patch("/api/books")
-                        .contentType(String.valueOf(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonBook))
                 .andExpect(status().isNoContent());
 
@@ -172,7 +165,7 @@ class BooksControllerIntegrationTests {
                 """, title, author, description);
 
         MvcResult result = mockMvc.perform(post("/api/books")
-                        .contentType(String.valueOf(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated())
                 .andReturn();

@@ -11,6 +11,7 @@ liquibase-plugin = "2.2.2"
 picocli = "4.7.7"
 jjwt = "0.12.6"
 testcontainers = "1.21.3"
+junit-vintage-engine = "6.0.0-M1"
 
 
 
@@ -37,12 +38,14 @@ jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt"}
 testcontainer-core = { module = "org.testcontainers:testcontainers", version.ref = "testcontainers"}
 testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers"}
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers"}
+junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit-vintage-engine"}
 
 [bundles]
 spring = ["spring-boot-starter", "spring-boot-starter-data-jpa", "spring-boot-starter-aop", "spring-boot-starter-web",
     "spring-boot-starter-validation", "spring-boot-starter-data-mongodb", "spring-boot-starter-security"]
 database = ["postgresql-driver", "hibernate-jcache", "ehcache", "hibernate-commons-annotations"]
-test = ["spring-boot-starter-test", "spring-security-test", "testcontainer-core", "testcontainers-junit-jupiter", "testcontainers-postgresql"]
+test = ["spring-boot-starter-test", "spring-security-test", "testcontainer-core", "testcontainers-junit-jupiter",
+    "testcontainers-postgresql", "junit-vintage-engine"]
 liquibase = ["liquibase", "postgresql-driver", "picocli"]
 jwt = ["jjwt-api", "jjwt-impl", "jjwt-jackson"]
 
